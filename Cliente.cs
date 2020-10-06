@@ -87,6 +87,32 @@ namespace Prog_III_2020_2_sesion_1
             File.WriteAllLines(Archivo, All);
         }
 
+        public static Cliente Parse(string value)
+        {
+            Cliente a = new Cliente();
+            string[] values = value.Split('\t');
+
+            a.Cedula = Convert.ToInt64(values[0]);
+
+            a.Nombre = (string)values[1];
+
+            a.FechaNacimiento = DateTime.ParseExact(values[2], "dd/MM/yyyy", null);
+
+            a.Sexo = (Sexo)Sexo.Parse(typeof(Sexo), values[3].ToString());
+
+            a.Telefono = Convert.ToInt64(values[4]);
+
+            a.Correo = (string)values[5];
+
+            a.Direccion = (string)values[6];
+
+            a.EstadoCivil = (EstadoCivil)EstadoCivil.Parse(typeof(EstadoCivil), values[7].ToString());
+
+            a.IdCliente = Convert.ToInt32(values[8]);
+
+            return a;
+        }
+
         public static void Update(long CedCliente, int NDato)
         {
             if (Find(CedCliente))
@@ -288,7 +314,7 @@ namespace Prog_III_2020_2_sesion_1
                     "\t2. Eliminar clientes.\n" +
                     "\t3. Editar clientes.\n" +
                     "\t4. Listar clienteses.\n" +
-                    "\t5. Busacar clientes.\n" +
+                    "\t5. Buscar clientes.\n" +
                     "\t6. Salir.\n" +
                     "\t:: ");
 

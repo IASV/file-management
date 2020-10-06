@@ -12,11 +12,13 @@ namespace Prog_III_2020_2_sesion_1
     {
         public static List<Inventario> ListaInventario;
 
+        DateTime fechaSalida = DateTime.Parse("01/01/0001");
+
         public int Cantidad { get; set; }
         public long PrecioBase { get; set; }
         public long PrecioVenta { get; set; }
         public DateTime FechaIngreso { get; set; }
-        public DateTime FechaSalida { get; set; }
+        public DateTime FechaSalida { get => fechaSalida; set => fechaSalida = value; }
         public Carro Car { get; set; }
         public int IdInventario { get; set; }
 
@@ -92,7 +94,38 @@ namespace Prog_III_2020_2_sesion_1
 
             File.WriteAllLines(Archivo, All);
         }
+        public static Inventario Parse(string value)
+        {
+            Inventario a = new Inventario();
+            string[] values = value.Split('\t');
 
+            a.Cantidad = Convert.ToInt32(values[0]);
+
+            a.PrecioBase = Convert.ToInt64(values[1]);
+
+            a.PrecioVenta = Convert.ToInt64(values[2]);
+
+            //FechaIngreso = DateTime.ParseExact(value, "dd/MM/yyyy", null);
+            a.FechaIngreso = DateTime.Parse(values[3]);
+
+            //FechaSalida = DateTime.ParseExact(value, "dd/MM/yyyy", null);
+            a.FechaSalida = DateTime.Parse(values[4]);
+
+            a.Car = Carro.Parse(values[5]);
+
+            a.IdInventario = Convert.ToInt32(values[6]);
+
+            return a;
+        }
+        public static void CarsShowItems()
+        {
+            Console.WriteLine("VIN".PadRight(5) + "Modelo".PadLeft(2).PadRight(4) + "Color".PadRight(10) + "Marca".PadRight(10) +
+                "Tipo Combustible".ToString().PadRight(10) + "Tipo Transmision".ToString().PadRight(10).PadLeft(12) + "ID".ToString().PadRight(2).PadLeft(4));
+            foreach (Inventario item in ListaInventario)
+            {
+                item.Car.Show();
+            }
+        }
         public static void Update(int IdInventario, int NDato)
         {
             if (Find(IdInventario))
@@ -204,6 +237,18 @@ namespace Prog_III_2020_2_sesion_1
                 if (v.IdInventario == IdInventario)
                 {
                     return v;
+                }
+            }
+            return null;
+        }
+
+        public static Inventario SearchForCar(int IdCar)
+        {
+            foreach (Inventario item in ListaInventario)
+            {
+                if (item.Car.IdCarro == IdCar)
+                {
+                    return item;
                 }
             }
             return null;
