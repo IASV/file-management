@@ -92,6 +92,28 @@ namespace Prog_III_2020_2_sesion_1
             File.WriteAllLines(Archivo, All);
         }
 
+        public static Carro Parse(string value)
+        {
+            Carro a = new Carro();
+            string[] values = value.Split('\t');
+
+            a.VIN = (string)values[0];
+
+            a.Modelo = (string)values[1];
+
+            a.Color = (string)values[2];
+
+            a.Marca = (string)values[3];
+
+            a.TipoCombustible = (Combustible)Combustible.Parse(typeof(Combustible), values[4].ToString());
+
+            a.TipoTransmision = (Transmision)Transmision.Parse(typeof(Transmision), values[5].ToString());
+
+            a.IdCarro = Convert.ToInt32(values[6]);
+
+            return a;
+        }
+
         public static void Update(int IdCarro, int NDato)
         {
             if (Find(IdCarro))

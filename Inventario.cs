@@ -223,13 +223,15 @@ namespace Prog_III_2020_2_sesion_1
                     PrecioVenta = Convert.ToInt64(value);
                     break;
                 case 3:
-                    FechaIngreso = DateTime.ParseExact(value, "dd/MM/yyyy", null);
+                    //FechaIngreso = DateTime.ParseExact(value, "dd/MM/yyyy", null);
+                    FechaIngreso = DateTime.Parse(value);
                     break;
                 case 4:
-                    FechaSalida = DateTime.ParseExact(value, "dd/MM/yyyy", null);
+                    //FechaSalida = DateTime.ParseExact(value, "dd/MM/yyyy", null);
+                    FechaSalida = DateTime.Parse(value);
                     break;
                 case 5:
-                    Car = (Carro)Convert.ChangeType(value, Car.GetType());
+                    Car = Carro.Parse(value);
                     break;
                 case 6:
                     IdInventario = Convert.ToInt32(value);
