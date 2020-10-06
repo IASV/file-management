@@ -162,14 +162,14 @@ namespace Prog_III_2020_2_sesion_1
         /// </summary>
         public void Show()
         {
-            Console.WriteLine(Cantidad.ToString().PadRight(10) + PrecioBase.ToString() + PrecioVenta.ToString().PadLeft(2) + 
-                FechaIngreso.ToString().PadRight(2).PadLeft(2) + FechaSalida.ToString().PadRight(2).PadLeft(2) + Car.ToString().PadRight(2).PadLeft(2) + IdInventario.ToString().PadRight(2).PadLeft(4));
+            Console.WriteLine(Cantidad.ToString().PadRight(10) + PrecioBase.ToString().PadLeft(12).PadRight(10) + PrecioVenta.ToString().PadLeft(12).PadRight(10) + 
+                FechaIngreso.ToString().PadRight(2).PadLeft(2) + FechaSalida.ToString().PadRight(2).PadLeft(2) + Car.ToString().PadRight(2).PadLeft(2) +  IdInventario.ToString().PadRight(2).PadLeft(4));
         }
 
         public override string ToString()
         {
             return (IdInventario.ToString() + "\t" + Car.ToString() + "\t" + Cantidad.ToString() + "\t" + PrecioBase.ToString() + "\t" +
-                PrecioVenta.ToString() + "\t" + FechaIngreso.ToString() + "\t" + FechaSalida.ToString() + "\n");
+                PrecioVenta.ToString() + "\t" + FechaIngreso.ToString() + "\t" + FechaSalida.ToString());
         }
 
         public static bool Find(int IdInventario)

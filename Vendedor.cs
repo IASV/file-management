@@ -112,8 +112,8 @@ namespace Prog_III_2020_2_sesion_1
             string[] Lines = (All[linea]).Split(',');
             string[] date = (data.ToString()).Split('\t');
 
-            int calificacion = Convert.ToInt32(date[12]);
-            date[12] = calificacion.ToString();
+            /*int calificacion = Convert.ToInt32(date[12]);
+            date[12] = calificacion.ToString();*/
 
             Lines[i] = date[i];
             string dataText = "";
@@ -256,7 +256,7 @@ namespace Prog_III_2020_2_sesion_1
             return (Cedula.ToString() + "\t" + Nombre + "\t" + FechaNacimiento.ToShortDateString() + "\t" +
                 Sexo.ToString() + "\t" + Telefono.ToString() + "\t" + Correo + "\t" + Direccion + "\t" +
                 EstadoCivil.ToString() + "\t" + IdVendedor.ToString() + "\t" + FechaIngreso.ToShortDateString() + "\t" +
-                Salario.ToString() + "\t" + Profesion + "\t" + Calificacion.ToString() + "\n");
+                Salario.ToString() + "\t" + Profesion + "\t" + Calificacion.ToString());
         }
 
         public static bool Find(int CodVendedor)

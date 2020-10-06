@@ -183,7 +183,7 @@ namespace Prog_III_2020_2_sesion_1
         {
             return (Cedula.ToString() + "\t" + Nombre + "\t" + FechaNacimiento.ToShortDateString() + "\t" +
                 Sexo.ToString() + "\t" + Telefono.ToString() + "\t" + Correo + "\t" + Direccion + "\t" +
-                EstadoCivil.ToString() + "\t" + IdCliente.ToString() + "\n");
+                EstadoCivil.ToString() + "\t" + IdCliente.ToString());
         }
 
         public static bool Find(int CodCliente)

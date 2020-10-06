@@ -35,7 +35,7 @@ namespace Prog_III_2020_2_sesion_1
         private void Save()
         {
             System.IO.StreamWriter writer = new System.IO.StreamWriter("Files/Carro.txt", true);
-
+ 
             writer.WriteLine(VIN + "," + Modelo + "," + Color + "," + Marca + "," +
                 TipoCombustible.ToString() + "," + TipoTransmision.ToString() + "," + IdCarro.ToString());
 
@@ -187,8 +187,8 @@ namespace Prog_III_2020_2_sesion_1
 
         public override string ToString()
         {
-            return (IdCarro.ToString() + "\t" + Modelo + "\t" + Color + "\t" + Marca + "\t" +
-                TipoCombustible.ToString() + "\t" + TipoTransmision.ToString() + "\n");
+            return (VIN.ToString() + "\t" + Modelo + "\t" + Color + "\t" + Marca + "\t" +
+                TipoCombustible.ToString() + "\t" + TipoTransmision.ToString() + "\t" + IdCarro.ToString());
         }
 
         public static bool Find(int IdCarro)
