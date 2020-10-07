@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics;
 
 namespace Prog_III_2020_2_sesion_1
 {
     class Venta
     {
         public static List<Venta> ListaVentas;
-        public Cliente Cliente { get; set; }
-        public Vendedor Vendedor { get; set; }
+        public Cliente Client { get; set; }
+        public Vendedor Vend { get; set; }
         public Inventario Item { get; set; }
         public int IdVenta { get; set; }
 
@@ -31,7 +32,7 @@ namespace Prog_III_2020_2_sesion_1
         {
             StreamWriter writer = new StreamWriter("Files/Venta.txt", true);
 
-            writer.WriteLine(Cliente.ToString() + "," + Vendedor.ToString() + "," + Item.ToString() + "," + IdVenta.ToString());
+            writer.WriteLine(Client.ToString() + "," + Vend.ToString() + "," + Item.ToString() + "," + IdVenta.ToString());
 
             writer.Close();
         }
@@ -85,12 +86,27 @@ namespace Prog_III_2020_2_sesion_1
 
             File.WriteAllLines(Archivo, All);
         }
+        public static Venta Parse(string value)
+        {
+            Venta v = new Venta();
+
+            string[] values = value.Split('\t');
+
+            if (values[0] != "")
+            {
+                v.Client = Cliente.Parse(values[0]);
+
+                v.Vend = Vendedor.Parse(values[1]);
+
+                v.Item = Inventario.Parse(values[2]);
+
+                v.IdVenta = Convert.ToInt32(values[3]);
+            }
+            return v;
+        }
 
         public static void Update(int IdVenta, int NDato)
         {
-            Cliente.LoadList();
-            Vendedor.LoadList();
-            Inventario.LoadList();
 
             if (Find(IdVenta))
             {
@@ -107,7 +123,7 @@ namespace Prog_III_2020_2_sesion_1
                             long cedCliente = Scanner.NextLong();
                             if (Cliente.Find(cedCliente))
                             {
-                                v.Cliente = Cliente.Search(cedCliente);
+                                v.Client = Cliente.Search(cedCliente);
                             }
                             else
                             {
@@ -115,7 +131,7 @@ namespace Prog_III_2020_2_sesion_1
                                 Cliente.MenuClientes();
                                 if (Cliente.Find(cedCliente))
                                 {
-                                    v.Cliente = Cliente.Search(cedCliente);
+                                    v.Client = Cliente.Search(cedCliente);
                                 }
                                 else Console.WriteLine("¡Ooops, Cliente no creado!");
                             }
@@ -157,9 +173,10 @@ namespace Prog_III_2020_2_sesion_1
         public static void ToList()
         {
 
-            foreach (Venta v in Venta.ListaVentas)
+            foreach (Venta v in ListaVentas)
             {
                 v.Show();
+                //Console.WriteLine(v.ToString());
             }
         }
 
@@ -178,13 +195,13 @@ namespace Prog_III_2020_2_sesion_1
         /// </summary>
         public void Show()
         {
-            Console.WriteLine(Cliente.ToString().PadRight(5) + Vendedor.ToString().PadLeft(2).PadRight(4) 
+            Console.WriteLine(Client.ToString().PadRight(5) + Vend.ToString().PadLeft(2).PadRight(4) 
                 + Item.ToString().PadRight(10) + IdVenta.ToString().PadRight(2).PadLeft(4));
         }
 
         public override string ToString()
         {
-            return (Cliente.ToString() + "\t" + Vendedor.ToString() + "\t" + Item.ToString() + "\t" + IdVenta.ToString());
+            return (Client.ToString() + "\t" + Vend.ToString() + "\t" + Item.ToString() + "\t" + IdVenta.ToString());
         }
 
         public static bool Find(int IdVenta)
@@ -212,7 +229,7 @@ namespace Prog_III_2020_2_sesion_1
         {
             foreach (Venta v in ListaVentas)
             {
-                if (v.Cliente == cliente)
+                if (v.Client == cliente)
                 {
                     return v;
                 }
@@ -225,13 +242,15 @@ namespace Prog_III_2020_2_sesion_1
             switch (i)
             {
                 case 0:
-                    Cliente = Cliente.Parse(value);
+                    Client = Cliente.Parse(value);
                     break;
                 case 1:
-                    Vendedor = Vendedor.Parse(value);
+                    
+                    Vend = Vendedor.Parse(value);
                     break;
                 case 2:
                     Item = Inventario.Parse(value);
+                    
                     break;
                 case 3:
                     IdVenta = Convert.ToInt32(value);
@@ -268,19 +287,19 @@ namespace Prog_III_2020_2_sesion_1
         {
             int option;
 
-            LoadList();
             Vendedor.LoadList();
             Cliente.LoadList();
             Carro.LoadList();
             Inventario.LoadList();
-
+            LoadList();
+            
             do
             {
                 Console.Write("\n\tBienvenido al menú de Ventas\n" +
                     "\t1. Crear Venta.\n" +
                     "\t2. Eliminar Venta.\n" +
                     "\t3. Editar Venta.\n" +
-                    "\t4. Listar Ventas.\n" +
+                    //"\t4. Listar Ventas.\n" +
                     "\t5. Buscar Venta.\n" +
                     "\t6. Salir.\n" +
                     "\t:: ");
@@ -298,27 +317,38 @@ namespace Prog_III_2020_2_sesion_1
                         long cedCliente = Scanner.NextLong();
                         if (Cliente.Find(cedCliente))
                         {
-                            v.Cliente = Cliente.Search(cedCliente);
+                            v.Client = Cliente.Search(cedCliente);
                         }
                         else
                         {
-                            Console.WriteLine("Cliente no encontrado o no registrado.\nIngrese al menú crear cliente.");
-                            Cliente.MenuClientes();
+                            Console.WriteLine("Cliente no encontrado o no registrado.\nIngresando al menú cliente para crear cliente.");
+                            Cliente.CreateCliente();
                             if (Cliente.Find(cedCliente))
                             {
-                                v.Cliente = Cliente.Search(cedCliente);
+                                v.Client = Cliente.Search(cedCliente);
                             }
-                            else Console.WriteLine("¡Ooops, Cliente no creado!");
+                            else
+                            {
+                                Console.WriteLine("¡Ooops, Cliente no creado!");
+                                break;
+                            }
                         }
-
-                        Console.Write("Ingrese cédula del vendedor que realizo la venta\n:: ");
-                        long cedVendedor = Scanner.NextLong();
-
-                        if (Vendedor.Find(cedVendedor))
+                        bool condition = false;
+                        do
                         {
-                            v.Vendedor = Vendedor.Search(cedVendedor);
-                        }
-                        else Console.WriteLine("¡Ooops, Vendedor no encontrado!");
+                            Console.Write("Ingrese cédula del vendedor que realizo la venta\n:: ");
+                            long cedVendedor = Scanner.NextLong();
+
+                            if (Vendedor.Find(cedVendedor))
+                            {
+                                v.Vend = Vendedor.Search(cedVendedor);
+                                condition = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("\n¡Ooops, Vendedor no encontrado!\n");
+                            }
+                        } while (condition != true);
 
                         Console.WriteLine(" --- Lista de Carros ---\n-- Seleccione el Carro --");
                         Inventario.CarsShowItems();

@@ -98,22 +98,32 @@ namespace Prog_III_2020_2_sesion_1
         {
             Inventario a = new Inventario();
             string[] values = value.Split('\t');
+            string car = "";
+            for (int i = 1; i < 8; i++)
+            {
+                car += values[i];
+                if (i < 8) car += "\t";
+            }
 
-            a.Cantidad = Convert.ToInt32(values[0]);
+            a.IdInventario = Convert.ToInt32(values[0]);
 
-            a.PrecioBase = Convert.ToInt64(values[1]);
+            a.Car = Carro.Parse(car);
 
-            a.PrecioVenta = Convert.ToInt64(values[2]);
+            a.Cantidad = Convert.ToInt32(values[8]);
+
+            a.PrecioBase = Convert.ToInt64(values[9]);
+
+            a.PrecioVenta = Convert.ToInt64(values[10]);
 
             //FechaIngreso = DateTime.ParseExact(value, "dd/MM/yyyy", null);
-            a.FechaIngreso = DateTime.Parse(values[3]);
+            a.FechaIngreso = DateTime.Parse(values[11]);
 
             //FechaSalida = DateTime.ParseExact(value, "dd/MM/yyyy", null);
-            a.FechaSalida = DateTime.Parse(values[4]);
+            a.FechaSalida = DateTime.Parse(values[12]);
 
-            a.Car = Carro.Parse(values[5]);
+            
 
-            a.IdInventario = Convert.ToInt32(values[6]);
+            
 
             return a;
         }

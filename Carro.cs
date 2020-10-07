@@ -286,9 +286,9 @@ namespace Prog_III_2020_2_sesion_1
         public static void LoadList()
         {
             ListaCarros = new List<Carro>();
-            if (System.IO.File.Exists("Files/Carro.txt"))
+            if (File.Exists("Files/Carro.txt"))
             {
-                System.IO.StreamReader reader = new System.IO.StreamReader("Files/Carro.txt");
+                StreamReader reader = new StreamReader("Files/Carro.txt");
 
                 while (!reader.EndOfStream)
                 {

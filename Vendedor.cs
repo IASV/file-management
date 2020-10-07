@@ -133,34 +133,36 @@ namespace Prog_III_2020_2_sesion_1
         public static Vendedor Parse(string value)
         {
             Vendedor a = new Vendedor();
-            string[] values = value.Split('\t');
+            String[] values = value.Split('\t');
 
-            a.Cedula = Convert.ToInt64(values[0]);
+            if (values[0] != "")
+            {
+                a.Cedula = Convert.ToInt64(values[0]);
 
-            a.Nombre = (string)values[1];
+                a.Nombre = (string)values[1];
 
-            a.FechaNacimiento = DateTime.ParseExact(values[2], "d/MM/yyyy", null);
+                //a.FechaNacimiento = DateTime.ParseExact(values[2], "d/MM/yyyy", null);
+                a.FechaNacimiento = DateTime.Parse(values[2]);
+                a.Sexo = (Sexo)Sexo.Parse(typeof(Sexo), values[3].ToString());
 
-            a.Sexo = (Sexo)Sexo.Parse(typeof(Sexo), values[3].ToString());
+                a.Telefono = Convert.ToInt64(values[4]);
 
-            a.Telefono = Convert.ToInt64(values[4]);
+                a.Correo = (string)values[5];
 
-            a.Correo = (string)values[5];
+                a.Direccion = (string)values[6];
 
-            a.Direccion = (string)values[6];
+                a.EstadoCivil = (EstadoCivil)EstadoCivil.Parse(typeof(EstadoCivil), values[7].ToString());
 
-            a.EstadoCivil = (EstadoCivil)EstadoCivil.Parse(typeof(EstadoCivil), values[7].ToString());
+                a.IdVendedor = Convert.ToInt32(values[8]);
 
-            a.IdVendedor = Convert.ToInt32(values[8]);
+                //a.FechaIngreso = DateTime.ParseExact(values[9], "d/MM/yyyy", null);
+                a.FechaIngreso = DateTime.Parse(values[9]);
+                a.Salario = Convert.ToInt32(values[10]);
 
-            a.FechaIngreso = DateTime.ParseExact(values[9], "d/MM/yyyy", null);
+                a.Profesion = values[11].ToString();
 
-            a.Salario = Convert.ToInt32(values[10]);
-
-            a.Profesion = values[11].ToString();
-
-            a.Calificacion = Convert.ToInt32(values[12]);
-
+                a.Calificacion = Convert.ToInt32(values[12]);
+            }
             return a;
         }
 

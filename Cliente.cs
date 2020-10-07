@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using System.Runtime.CompilerServices;
 
 namespace Prog_III_2020_2_sesion_1
 {
@@ -27,7 +29,7 @@ namespace Prog_III_2020_2_sesion_1
 
         private void Save()
         {
-            System.IO.StreamWriter writer = new System.IO.StreamWriter("Files/Cliente.txt", true);
+            StreamWriter writer = new StreamWriter("Files/Cliente.txt", true);
 
             writer.WriteLine(Cedula.ToString() + "," + Nombre + "," + FechaNacimiento.ToShortDateString() + "," +
                 Sexo.ToString() + "," + Telefono.ToString() + "," + Correo + "," + Direccion + "," +
@@ -91,24 +93,26 @@ namespace Prog_III_2020_2_sesion_1
         {
             Cliente a = new Cliente();
             string[] values = value.Split('\t');
+            if (values[0] != "")
+            {
+                a.Cedula = Convert.ToInt64(values[0]);
 
-            a.Cedula = Convert.ToInt64(values[0]);
+                a.Nombre = (string)values[1];
 
-            a.Nombre = (string)values[1];
+                a.FechaNacimiento = DateTime.ParseExact(values[2], "d/M/yyyy", null);
 
-            a.FechaNacimiento = DateTime.ParseExact(values[2], "dd/MM/yyyy", null);
+                a.Sexo = (Sexo)Sexo.Parse(typeof(Sexo), values[3].ToString());
 
-            a.Sexo = (Sexo)Sexo.Parse(typeof(Sexo), values[3].ToString());
+                a.Telefono = Convert.ToInt64(values[4]);
 
-            a.Telefono = Convert.ToInt64(values[4]);
+                a.Correo = (string)values[5];
 
-            a.Correo = (string)values[5];
+                a.Direccion = (string)values[6];
 
-            a.Direccion = (string)values[6];
+                a.EstadoCivil = (EstadoCivil)EstadoCivil.Parse(typeof(EstadoCivil), values[7].ToString());
 
-            a.EstadoCivil = (EstadoCivil)EstadoCivil.Parse(typeof(EstadoCivil), values[7].ToString());
-
-            a.IdCliente = Convert.ToInt32(values[8]);
+                a.IdCliente = Convert.ToInt32(values[8]);
+            }
 
             return a;
         }
@@ -209,7 +213,7 @@ namespace Prog_III_2020_2_sesion_1
         {
             return (Cedula.ToString() + "\t" + Nombre + "\t" + FechaNacimiento.ToShortDateString() + "\t" +
                 Sexo.ToString() + "\t" + Telefono.ToString() + "\t" + Correo + "\t" + Direccion + "\t" +
-                EstadoCivil.ToString() + "\t" + IdCliente.ToString());
+                EstadoCivil.ToString() + "\t" + IdCliente.ToString() + "\n");
         }
 
         public static bool Find(int CodCliente)
@@ -253,7 +257,7 @@ namespace Prog_III_2020_2_sesion_1
                     Nombre = (string)value;
                     break;
                 case 2:
-                    FechaNacimiento = DateTime.ParseExact(value, "dd/MM/yyyy", null);
+                    FechaNacimiento = DateTime.ParseExact(value, "d/M/yyyy", null);
                     break;
                 case 3:
                     Sexo = (Sexo)Sexo.Parse(typeof(Sexo), value.ToString());
@@ -286,24 +290,70 @@ namespace Prog_III_2020_2_sesion_1
                 while (!reader.EndOfStream)
                 {
                     string[] var = reader.ReadLine().Split(',');
-
                     Cliente v = new Cliente();
+
                     for (int i = 0; i < var.Length; i++)
                     {
                         v.SetItems(i, var[i]);
                     }
 
                     ListaClientes.Add(v);
-
+                    
                 }
 
                 reader.Close();
             }
         }
 
+        public static void CreateCliente()
+        {
+            Console.WriteLine("\n\t-- Crear clientes ---");
+            Cliente v = new Cliente();
+
+            Console.Write("\nCedula: ");
+            v.Cedula = Scanner.NextLong();
+
+            Console.Write("\nNombre: ");
+            v.Nombre = Scanner.NextLine();
+
+            Console.Write("\nFecha de nacimiento dd/MM/yyy: ");
+            v.FechaNacimiento = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+
+            Console.Write("\nSexo\n1. Femenino.\n2. Masculino.\n:: ");
+            if (Scanner.NextInt() == 1) v.Sexo = Sexo.Femnino;
+            else v.Sexo = Sexo.Masculino;
+
+            Console.Write("\nTeléfono: ");
+            v.Telefono = Scanner.NextLong();
+
+            Console.Write("\nCorreo: ");
+            v.Correo = Scanner.NextLine();
+
+            Console.Write("\nDirección: ");
+            v.Direccion = Scanner.NextLine();
+
+            Console.Write("\nEstado civil\n1. Soltero.\n2. Casado.\n3. Viudo.\n4. Divorciado.\n5. Union libre.\n:: ");
+            int estado = Scanner.NextInt();
+            for (int i = 0; i < 5; i++)
+            {
+                if (estado - 1 == i)
+                {
+                    v.EstadoCivil = (EstadoCivil)i;
+
+                };
+            }
+
+            if (ListaClientes.Count != 0) //Si la lista no esta vacia le asigan el id del último + 1
+                v.IdCliente = ListaClientes.Last().IdCliente + 1;
+            else //Si la lista esta vacia lo pone como el primero
+                v.IdCliente = 1;
+
+            v.Add();
+            Console.WriteLine("¡Cliente creado con exito!");
+        }
         public static void MenuClientes()
         {
-            int option;
+            int option;  
 
             LoadList();
 
@@ -324,49 +374,7 @@ namespace Prog_III_2020_2_sesion_1
                 {
                     case 1:
                         Console.Clear();
-                        Console.WriteLine("\n\t-- Crear clientes ---");
-                        Cliente v = new Cliente();
-
-                        Console.Write("\nCedula: ");
-                        v.Cedula = Scanner.NextLong();
-
-                        Console.Write("\nNombre: ");
-                        v.Nombre = Scanner.NextLine();
-
-                        Console.Write("\nFecha de nacimiento dd/MM/yyy: ");
-                        v.FechaNacimiento = DateTime.ParseExact(Console.ReadLine(), "d/MM/yyyy", null);
-
-                        Console.Write("\nSexo\n1. Femenino.\n2. Masculino.\n:: ");
-                        if (Scanner.NextInt() == 1) v.Sexo = Sexo.Femnino;
-                        else v.Sexo = Sexo.Masculino;
-
-                        Console.Write("\nTeléfono: ");
-                        v.Telefono = Scanner.NextLong();
-
-                        Console.Write("\nCorreo: ");
-                        v.Correo = Scanner.NextLine();
-
-                        Console.Write("\nDirección: ");
-                        v.Direccion = Scanner.NextLine();
-
-                        Console.Write("\nEstado civil\n1. Soltero.\n2. Casado.\n3. Viudo.\n4. Divorciado.\n5. Union libre.\n:: ");
-                        int estado = Scanner.NextInt();
-                        for (int i = 0; i < 5; i++)
-                        {
-                            if (estado - 1 == i)
-                            {
-                                v.EstadoCivil = (EstadoCivil)i;
-
-                            };
-                        }
-
-                        if (ListaClientes.Count != 0) //Si la lista no esta vacia le asigan el id del último + 1
-                            v.IdCliente = ListaClientes.Last().IdCliente + 1;
-                        else //Si la lista esta vacia lo pone como el primero
-                            v.IdCliente = 1;
-
-                        v.Add();
-
+                        CreateCliente();
                         break;
 
                     case 2:
