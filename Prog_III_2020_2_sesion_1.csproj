@@ -55,6 +55,7 @@
     <Compile Include="Sexo.cs" />
     <Compile Include="Transmision.cs" />
     <Compile Include="Vendedor.cs" />
+    <Compile Include="Venta.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

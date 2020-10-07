@@ -29,7 +29,7 @@ namespace Prog_III_2020_2_sesion_1
 
         private void Save()
         {
-            System.IO.StreamWriter writer = new System.IO.StreamWriter("Files/Venta.txt", true);
+            StreamWriter writer = new StreamWriter("Files/Venta.txt", true);
 
             writer.WriteLine(Cliente.ToString() + "," + Vendedor.ToString() + "," + Item.ToString() + "," + IdVenta.ToString());
 
@@ -103,45 +103,42 @@ namespace Prog_III_2020_2_sesion_1
                             
                             Console.WriteLine("\nNuevo Cliente: ");
 
-                            v.VIN = Scanner.NextLine();
+                            Console.Write("Ingrese cédula del cliente: ");
+                            long cedCliente = Scanner.NextLong();
+                            if (Cliente.Find(cedCliente))
+                            {
+                                v.Cliente = Cliente.Search(cedCliente);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Cliente no encontrado o no registrado.\nIngrese al menú crear cliente.");
+                                Cliente.MenuClientes();
+                                if (Cliente.Find(cedCliente))
+                                {
+                                    v.Cliente = Cliente.Search(cedCliente);
+                                }
+                                else Console.WriteLine("¡Ooops, Cliente no creado!");
+                            }
                             break;
 
                         case 2:
-                            Console.Write("\nNueva Modelo: ");
-                            v.Modelo = Scanner.NextLine();
-                            break;
-                        case 3:
-                            Console.Write("\nNuevo Color: ");
-                            v.Color = Scanner.NextLine();
-                            break;
-                        case 4:
-                            Console.Write("\nNuevo Marca: ");
-                            v.Marca = Scanner.NextLine();
-                            break;
+                            NDato = 3;
+                            Console.Write("\nNuevo Item: ");
 
-                        case 5:
-                            Console.Write("\nNuevo Combustible\n1. Gasolina.\n2. Biodiésel.\n3. Gas Natural.\n4. Diésel.\n:: ");
-                            int tipo = Scanner.NextInt();
-                            for (int i = 0; i < 4; i++)
+                            Console.WriteLine(" --- Lista de Carros ---\n-- Seleccione el Carro --");
+                            Inventario.CarsShowItems();
+                            Console.Write("Ingrese el ID del Carro: ");
+                            int IdCar = Scanner.NextInt();
+
+                            Inventario item = Inventario.SearchForCar(IdCar);
+
+                            if (Inventario.Find(item.IdInventario))
                             {
-                                if (tipo - 1 == i)
-                                {
-                                    v.TipoCombustible = (Combustible)i;
-                                    break;
-                                };
+                                v.Item = item;
                             }
-                            break;
-                        case 6:
-                            Console.Write("\nNueva Transmisión\n1. Manual.\n2. Automatica.\n3. CVT.\n:: ");
-                            int transmision = Scanner.NextInt();
-                            for (int i = 0; i < 3; i++)
-                            {
-                                if (transmision - 1 == i)
-                                {
-                                    v.TipoTransmision = (Transmision)i;
-                                    break;
-                                };
-                            }
+
+                            Console.Write("Ingrese fecha de venta. dd/MM/yyyy\n:: ");
+                            v.Item.FechaSalida = DateTime.Parse(Scanner.NextLine());
                             break;
 
                     }
@@ -323,7 +320,9 @@ namespace Prog_III_2020_2_sesion_1
                         }
                         else Console.WriteLine("¡Ooops, Vendedor no encontrado!");
 
+                        Console.WriteLine(" --- Lista de Carros ---\n-- Seleccione el Carro --");
                         Inventario.CarsShowItems();
+                        Console.Write("Ingrese el ID del Carro: ");
                         int IdCar = Scanner.NextInt();
 
                         Inventario item = Inventario.SearchForCar(IdCar);
@@ -343,21 +342,20 @@ namespace Prog_III_2020_2_sesion_1
 
                         v.Show();
 
-                        //if (!itemExistValues(v))
                         v.Add();
 
                         break;
 
                     case 2:
                         Console.Clear();
-                        Console.Write("\n\t--- Eliminar Item ---\nNúmero de ID del Item: ");
-                        int Item = Scanner.NextInt();
+                        Console.Write("\n\t--- Eliminar Venta ---\nNúmero de ID de la venta: ");
+                        int venta = Scanner.NextInt();
 
-                        if (Find(Item))
+                        if (Find(venta))
                         {
-                            Inventario vn = Search(Item);
+                            Venta vn = Search(venta);
                             vn.Show();
-                            Console.Write("\n¿Borrar Carro?\n\t1. Si.\n\t2. No.\n:: ");
+                            Console.Write("\n¿Borrar Venta?\n\t1. Si.\n\t2. No.\n:: ");
                             if (Scanner.NextInt() == 1)
                             {
                                 vn.Delete();
@@ -371,31 +369,27 @@ namespace Prog_III_2020_2_sesion_1
                         break;
                     case 3:
                         Console.Clear();
-                        Console.Write("\n\t--- Editar datos del Item ---\nNúmero de ID del Item: ");
+                        Console.Write("\n\t--- Editar datos de la Venta ---\nNúmero de ID de la venta: ");
                         int IdItem = Scanner.NextInt();
                         Search(IdItem).Show();
                         Console.Write("\n\tOpciones a editar:\n" +
-                           "\t1.  Cantidad.\n" +
-                           "\t2.  Precio Base.\n" +
-                           "\t3.  Precio de Venta.\n" +
-                           "\t4.  Fecha de ingreso.\n" +
-                           "\t5.  Fecha de salida.\n" +
+                           "\t1.  Nuevo Cliente.\n" +
+                           "\t2.  Nuevo Item.\n" +
                            "\t:: ");
 
                         Update(IdItem, Scanner.NextInt());
-
                         break;
                     case 4:
                         Console.Clear();
-                        Console.WriteLine("\n\t-- Lista de Items ---\n");
+                        Console.WriteLine("\n\t-- Lista de Ventas ---\n");
                         ToList();
                         break;
 
                     case 5:
                         Console.Clear();
-                        Console.WriteLine("\n\t-- Buscar Item ---\n");
+                        Console.WriteLine("\n\t-- Buscar Venta ---\n");
 
-                        Console.Write("\nIngrese el ID del Item.\n:: ");
+                        Console.Write("\nIngrese el ID de la Venta.\n:: ");
                         Search(Scanner.NextInt()).Show();
                         break;
                 }
