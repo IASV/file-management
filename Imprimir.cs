@@ -11,7 +11,7 @@ namespace Prog_III_2020_2_sesion_1
         
         public static void Imp(Factura factura)
         {
-            Console.WriteLine("NoFactura: " + factura.IdFactura.ToString() + "\t\t\t" + "Fecha: " + "\t");
+            Console.WriteLine("NoFactura: " + factura.IdFactura.ToString() + "\t\t\t" + "Fecha: " + factura.Vent.Item.FechaSalida.ToString() + "\t");
             Console.WriteLine("Cliente");
             Console.WriteLine("Cédula: " + factura.Vent.Client.Cedula.ToString() + "\t" + "Nombre: " + factura.Vent.Client.Nombre);
             Console.WriteLine("Dirección: " + factura.Vent.Client.Direccion + "\t" + "Teléfono: " + factura.Vent.Client.Telefono.ToString());
