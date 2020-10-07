@@ -250,7 +250,10 @@ namespace Prog_III_2020_2_sesion_1
                         Console.WriteLine("\n\t-- Buscar Factura ---\n");
 
                         Console.Write("\nIngrese el ID de la Factura.\n:: ");
-                        Search(Scanner.NextInt()).Show();
+                        int Idfactura = Scanner.NextInt();
+                        Factura f = Search(Idfactura);
+                        f.Show();
+                        Imprimir.Imp(f);
                         break;
                 }
 
