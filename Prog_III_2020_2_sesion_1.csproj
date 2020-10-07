@@ -35,6 +35,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +49,8 @@
     <Compile Include="Cliente.cs" />
     <Compile Include="Combustible.cs" />
     <Compile Include="EstadoCivil.cs" />
+    <Compile Include="Factura.cs" />
+    <Compile Include="Imprimir.cs" />
     <Compile Include="Inventario.cs" />
     <Compile Include="Persona.cs" />
     <Compile Include="Program.cs" />
