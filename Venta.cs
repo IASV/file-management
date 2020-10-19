@@ -11,9 +11,9 @@ namespace Prog_III_2020_2_sesion_1
     class Venta
     {
         public static List<Venta> ListaVentas;
-        public Cliente Client { get; set; }
-        public Vendedor Vend { get; set; }
-        public Inventario Item { get; set; }
+        public int IdClient { get; set; }
+        public int IdVendedor { get; set; }
+        public int IdItem { get; set; }
         public int IdVenta { get; set; }
 
         public void Add()
@@ -32,7 +32,7 @@ namespace Prog_III_2020_2_sesion_1
         {
             StreamWriter writer = new StreamWriter("Files/Venta.txt", true);
 
-            writer.WriteLine(Client.ToString() + "," + Vend.ToString() + "," + Item.ToString() + "," + IdVenta.ToString());
+            writer.WriteLine(IdVenta.ToString() + "," + IdClient.ToString() + "," + IdVendedor.ToString() + "," + IdItem.ToString());
 
             writer.Close();
         }
@@ -94,11 +94,11 @@ namespace Prog_III_2020_2_sesion_1
 
             if (values[0] != "")
             {
-                v.Client = Cliente.Parse(values[0]);
+                v.IdClient = Convert.ToInt32(values[0]);
 
-                v.Vend = Vendedor.Parse(values[1]);
+                v.IdVendedor = Convert.ToInt32(values[1]);
 
-                v.Item = Inventario.Parse(values[2]);
+                v.IdItem = Convert.ToInt32(values[2]);
 
                 v.IdVenta = Convert.ToInt32(values[3]);
             }
@@ -123,7 +123,7 @@ namespace Prog_III_2020_2_sesion_1
                             long cedCliente = Scanner.NextLong();
                             if (Cliente.Find(cedCliente))
                             {
-                                v.Client = Cliente.Search(cedCliente);
+                                v.IdClient = Cliente.Search(cedCliente).IdCliente;
                             }
                             else
                             {
@@ -131,7 +131,7 @@ namespace Prog_III_2020_2_sesion_1
                                 Cliente.MenuClientes();
                                 if (Cliente.Find(cedCliente))
                                 {
-                                    v.Client = Cliente.Search(cedCliente);
+                                    v.IdClient = Cliente.Search(cedCliente).IdCliente;
                                 }
                                 else Console.WriteLine("¡Ooops, Cliente no creado!");
                             }
@@ -150,11 +150,14 @@ namespace Prog_III_2020_2_sesion_1
 
                             if (Inventario.Find(item.IdInventario))
                             {
-                                v.Item = item;
+                                v.IdItem = item.IdInventario;
                             }
 
-                            Console.Write("Ingrese fecha de venta. dd/MM/yyyy\n:: ");
-                            v.Item.FechaSalida = DateTime.Parse(Scanner.NextLine());
+                            Console.Write("Ingrese fecha de venta. MM/dd/yyyy\n:: ");
+                            Inventario n = Inventario.Search(v.IdItem);
+                            n.FechaSalida = DateTime.Parse(Scanner.NextLine());
+                            Inventario.Edit(6, 6, n, "Inventario.txt");
+
                             break;
 
                     }
@@ -172,11 +175,12 @@ namespace Prog_III_2020_2_sesion_1
 
         public static void ToList()
         {
+            Console.WriteLine("ID".PadRight(5) + "ID Cliente".PadRight(12) +
+                "ID Vendedor".PadRight(12) + "ID Item".PadRight(12));
 
             foreach (Venta v in ListaVentas)
             {
                 v.Show();
-                //Console.WriteLine(v.ToString());
             }
         }
 
@@ -195,13 +199,13 @@ namespace Prog_III_2020_2_sesion_1
         /// </summary>
         public void Show()
         {
-            Console.WriteLine(Client.ToString().PadRight(5) + Vend.ToString().PadLeft(2).PadRight(4) 
-                + Item.ToString().PadRight(10) + IdVenta.ToString().PadRight(2).PadLeft(4));
+            Console.WriteLine(IdVenta.ToString().PadRight(5) + IdClient.ToString().PadRight(12) + 
+                IdVendedor.ToString().PadRight(12) + IdItem.ToString().PadRight(12));
         }
 
         public override string ToString()
         {
-            return (Client.ToString() + "\t" + Vend.ToString() + "\t" + Item.ToString() + "\t" + IdVenta.ToString());
+            return (IdVenta.ToString() + "\t" + IdClient.ToString() + "\t" + IdVendedor.ToString() + "\t" + IdItem.ToString());
         }
 
         public static bool Find(int IdVenta)
@@ -229,7 +233,7 @@ namespace Prog_III_2020_2_sesion_1
         {
             foreach (Venta v in ListaVentas)
             {
-                if (v.Client == cliente)
+                if (v.IdClient == cliente.IdCliente)
                 {
                     return v;
                 }
@@ -242,19 +246,18 @@ namespace Prog_III_2020_2_sesion_1
             switch (i)
             {
                 case 0:
-                    Client = Cliente.Parse(value);
-                    break;
-                case 1:
-                    
-                    Vend = Vendedor.Parse(value);
-                    break;
-                case 2:
-                    Item = Inventario.Parse(value);
-                    
-                    break;
-                case 3:
                     IdVenta = Convert.ToInt32(value);
                     break;
+                case 1:
+                    IdClient = Convert.ToInt32(value);
+                    break;
+                case 2:
+                    IdVendedor = Convert.ToInt32(value);
+                    break;
+                case 3:
+                    IdItem = Convert.ToInt32(value);
+                    break;
+                
             }
         }
 
@@ -286,12 +289,6 @@ namespace Prog_III_2020_2_sesion_1
         public static void MenuVenta()
         {
             int option;
-
-            Vendedor.LoadList();
-            Cliente.LoadList();
-            Carro.LoadList();
-            Inventario.LoadList();
-            LoadList();
             
             do
             {
@@ -299,7 +296,7 @@ namespace Prog_III_2020_2_sesion_1
                     "\t1. Crear Venta.\n" +
                     "\t2. Eliminar Venta.\n" +
                     "\t3. Editar Venta.\n" +
-                    //"\t4. Listar Ventas.\n" +
+                    "\t4. Listar Ventas.\n" +
                     "\t5. Buscar Venta.\n" +
                     "\t6. Salir.\n" +
                     "\t:: ");
@@ -317,7 +314,7 @@ namespace Prog_III_2020_2_sesion_1
                         long cedCliente = Scanner.NextLong();
                         if (Cliente.Find(cedCliente))
                         {
-                            v.Client = Cliente.Search(cedCliente);
+                            v.IdClient = Cliente.Search(cedCliente).IdCliente;
                         }
                         else
                         {
@@ -325,7 +322,7 @@ namespace Prog_III_2020_2_sesion_1
                             Cliente.CreateCliente();
                             if (Cliente.Find(cedCliente))
                             {
-                                v.Client = Cliente.Search(cedCliente);
+                                v.IdClient = Cliente.Search(cedCliente).IdCliente;
                             }
                             else
                             {
@@ -341,7 +338,7 @@ namespace Prog_III_2020_2_sesion_1
 
                             if (Vendedor.Find(cedVendedor))
                             {
-                                v.Vend = Vendedor.Search(cedVendedor);
+                                v.IdVendedor = Vendedor.Search(cedVendedor).IdVendedor;
                                 condition = true;
                             }
                             else
@@ -359,11 +356,14 @@ namespace Prog_III_2020_2_sesion_1
 
                         if (Inventario.Find(item.IdInventario))
                         {
-                            v.Item = item;
+                            v.IdItem = item.IdInventario;
                         }
 
-                        Console.Write("Ingrese fecha de venta. dd/MM/yyyy\n:: ");
-                        v.Item.FechaSalida = DateTime.Parse(Scanner.NextLine());
+                        Console.Write("Ingrese fecha de venta. MM/dd/yyyy\n:: ");
+                        Inventario n = Inventario.Search(IdCar);
+                        n.FechaSalida = DateTime.Parse(Scanner.NextLine());
+                        n.FechaSalida = DateTime.Parse(n.FechaSalida.ToShortDateString());
+                        Inventario.Edit(Inventario.ListaInventario.IndexOf(n),6,n,"Files/Inventario.txt");
 
                         if (ListaVentas.Count != 0)
                             v.IdVenta = ListaVentas.Last().IdVenta + 1;

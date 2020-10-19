@@ -12,13 +12,14 @@ namespace Prog_III_2020_2_sesion_1
     {
         public static List<Carro> ListaCarros;
 
+        public int IdCarro { get; set; }
         public string VIN { get; set; }
         public string Modelo { get; set; }
         public string Color { get; set; }
         public string Marca { get; set; }
         public Combustible TipoCombustible { get; set; }
         public Transmision TipoTransmision { get; set; }
-        public int IdCarro { get; set; }
+        
 
         public void Add()
         {
@@ -34,10 +35,10 @@ namespace Prog_III_2020_2_sesion_1
 
         private void Save()
         {
-            System.IO.StreamWriter writer = new System.IO.StreamWriter("Files/Carro.txt", true);
+            StreamWriter writer = new StreamWriter("Files/Carro.txt", true);
  
-            writer.WriteLine(VIN + "," + Modelo + "," + Color + "," + Marca + "," +
-                TipoCombustible.ToString() + "," + TipoTransmision.ToString() + "," + IdCarro.ToString());
+            writer.WriteLine(IdCarro.ToString() + "," + VIN + "," + Modelo + "," + Color + "," + Marca + "," +
+                TipoCombustible.ToString() + "," + TipoTransmision.ToString() );
 
             writer.Close();
         }
@@ -97,19 +98,19 @@ namespace Prog_III_2020_2_sesion_1
             Carro a = new Carro();
             string[] values = value.Split('\t');
 
-            a.VIN = (string)values[0];
+            a.IdCarro = Convert.ToInt32(values[0]);
 
-            a.Modelo = (string)values[1];
+            a.VIN = (string)values[1];
 
-            a.Color = (string)values[2];
+            a.Modelo = (string)values[2];
 
-            a.Marca = (string)values[3];
+            a.Color = (string)values[3];
 
-            a.TipoCombustible = (Combustible)Combustible.Parse(typeof(Combustible), values[4].ToString());
+            a.Marca = (string)values[4];
 
-            a.TipoTransmision = (Transmision)Transmision.Parse(typeof(Transmision), values[5].ToString());
+            a.TipoCombustible = (Combustible)Combustible.Parse(typeof(Combustible), values[5].ToString());
 
-            a.IdCarro = Convert.ToInt32(values[6]);
+            a.TipoTransmision = (Transmision)Transmision.Parse(typeof(Transmision), values[6].ToString());
 
             return a;
         }
@@ -168,7 +169,7 @@ namespace Prog_III_2020_2_sesion_1
 
                     }
 
-                    Edit(ListaCarros.IndexOf(v), NDato - 1, v, "Files/Carro.txt");
+                    Edit(ListaCarros.IndexOf(v), NDato, v, "Files/Carro.txt");
                 }
                 else Console.WriteLine("¡Oooops, A ocurrido un erro!");
             }
@@ -181,6 +182,8 @@ namespace Prog_III_2020_2_sesion_1
 
         public static void ToList()
         {
+            Console.WriteLine("ID".PadRight(5) + "VIN".PadRight(10) + "Modelo".PadRight(10) + "Color".PadRight(10) + "Marca".PadRight(10) +
+                "Combustible".PadRight(15) + "Transmisión".PadRight(15));
 
             foreach (Carro v in Carro.ListaCarros)
             {
@@ -203,14 +206,14 @@ namespace Prog_III_2020_2_sesion_1
         /// </summary>
         public void Show()
         {
-            Console.WriteLine(VIN.PadRight(5) + Modelo.PadLeft(2).PadRight(4) + Color.PadRight(10) + Marca.PadRight(10) + 
-                TipoCombustible.ToString().PadRight(10) + TipoTransmision.ToString().PadRight(10).PadLeft(12) + IdCarro.ToString().PadRight(2).PadLeft(4));
+            Console.WriteLine(IdCarro.ToString().PadRight(5) + VIN.PadRight(10) + Modelo.PadRight(10) + Color.PadRight(10) + Marca.PadRight(10) + 
+                TipoCombustible.ToString().PadRight(15) + TipoTransmision.ToString().PadRight(15));
         }
 
         public override string ToString()
         {
-            return (VIN.ToString() + "\t" + Modelo + "\t" + Color + "\t" + Marca + "\t" +
-                TipoCombustible.ToString() + "\t" + TipoTransmision.ToString() + "\t" + IdCarro.ToString());
+            return (IdCarro.ToString() + "\t" + VIN.ToString() + "\t" + Modelo + "\t" + Color + "\t" + Marca + "\t" +
+                TipoCombustible.ToString() + "\t" + TipoTransmision.ToString());
         }
 
         public static bool Find(int IdCarro)
@@ -260,26 +263,27 @@ namespace Prog_III_2020_2_sesion_1
             switch (i)
             {
                 case 0:
-                    VIN = (string)value;
-                    break;
-                case 1:
-                    Modelo = (string)value;
-                    break;
-                case 2:
-                    Color = (string)value;
-                    break;
-                case 3:
-                    Marca = (string)value;
-                    break;
-                case 4:
-                    TipoCombustible = (Combustible)Combustible.Parse(typeof(Combustible), value.ToString());
-                    break;
-                case 5:
-                    TipoTransmision = (Transmision)Transmision.Parse(typeof(Transmision), value.ToString());
-                    break;
-                case 6:
                     IdCarro = Convert.ToInt32(value);
                     break;
+                case 1:
+                    VIN = (string)value;
+                    break;
+                case 2:
+                    Modelo = (string)value;
+                    break;
+                case 3:
+                    Color = (string)value;
+                    break;
+                case 4:
+                    Marca = (string)value;
+                    break;
+                case 5:
+                    TipoCombustible = (Combustible)Combustible.Parse(typeof(Combustible), value.ToString());
+                    break;
+                case 6:
+                    TipoTransmision = (Transmision)Transmision.Parse(typeof(Transmision), value.ToString());
+                    break;
+
             }
         }
 
@@ -311,8 +315,6 @@ namespace Prog_III_2020_2_sesion_1
         public static void MenuCarro()
         {
             int option;
-
-            LoadList();
 
             do
             {
@@ -403,14 +405,12 @@ namespace Prog_III_2020_2_sesion_1
                         int IdCarro  = Scanner.NextInt();
                         Search(IdCarro).Show();
                         Console.Write("\n\tOpciones a editar:\n" +
-                           "\t1.  Cédula.\n" +
-                           "\t2.  Nombre.\n" +
-                           "\t3.  Fecha de nacimiento.\n" +
-                           "\t4.  Sexo.\n" +
-                           "\t5.  Teléfono.\n" +
-                           "\t6.  Correo.\n" +
-                           "\t7.  Dirección.\n" +
-                           "\t8.  Estado civil.\n" +
+                           "\t1.  VIN.\n" +
+                           "\t2.  Modelo.\n" +
+                           "\t3.  Color.\n" +
+                           "\t4.  Marca.\n" +
+                           "\t5.  Combustible.\n" +
+                           "\t6.  Transamisión.\n" +
                            "\t:: ");
 
                         Update(IdCarro, Scanner.NextInt());

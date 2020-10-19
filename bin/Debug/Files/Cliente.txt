@@ -1,8 +1,8 @@
-1007377178,CARDENAS MONTIEL SEBASTIAN .,18/01/2002, Femnino,3018685643,scardenasm@unicesar.edu.co,CALLE 0 NO. 22-50,Casado ,1
-1065908621,CONTRERAS VALLE LISDARY JINETH,10/12/1996, Masculino,3104314080,ljinethcontreras@unicesar.edu.co,CRA 24 NO. 10-14,Soltero,2
-1065917492,FORERO CLARO JUAN CAMILO,27/05/2000, Femnino,3105653273,jcforero@unicesar.edu.co,CRA 30A NO. 8-61,Casado ,3
-1003245588,JUAN PEREZ GUTIERREZ,2/2/2000,Masculino,3186413244,juanperezgutierrez@gmail.com,Calle 12 11-22,Soltero,4
-1003245589,CAMILA PAEZ MARTINES,8/2/2000,Femnino,3186413289,camilapaezmartines@gmail.com,Calle 14 4-44,Casado,5
-1003245587,ANDREA PEREZ MARTINEZ,7/2/2000,Femnino,3186413233,andreaperezmartinez@gmail.com,Calle 15 5-55,Viudo,6
-1003245585,IVAN ANTONIO SUAREZ VILLALBA,8/11/2001,Masculino,3186413246,ivansuarezvillalba@gmail.com,Calle 15 11-49,Soltero,7
-1003245566,CARLOS OSORIO ARMENTA,12/6/1999,Masculino,3186412233,carlososorioarmenta@gmail.com,Calle 5 54-55,Divorciado,8
+1,1007377178,CARDENAS MONTIEL SEBASTIAN .,12/01/2002, Femnino,3018685643,scardenasm@unicesar.edu.co,CALLE 0 NO. 22-50,Casado
+2,1065908621,CONTRERAS VALLE LISDARY JINETH,10/12/1996, Masculino,3104314080,ljinethcontreras@unicesar.edu.co,CRA 24 NO. 10-14,Soltero
+3,1065917492,FORERO CLARO JUAN CAMILO,12/05/2000, Femnino,3105653273,jcforero@unicesar.edu.co,CRA 30A NO. 8-61,Casado
+4,1003245588,JUAN PEREZ GUTIERREZ,2/2/2000,Masculino,3186413244,juanperezgutierrez@gmail.com,Calle 12 11-22,Soltero
+5,1003245589,CAMILA PAEZ MARTINES,8/2/2000,Femnino,3186413289,camilapaezmartines@gmail.com,Calle 14 4-44,Casado
+6,1003245587,ANDREA PEREZ MARTINEZ,7/2/2000,Femnino,3186413233,andreaperezmartinez@gmail.com,Calle 15 5-55,Viudo
+8,1003245566,CARLOS OSORIO ARMENTA,12/6/1999,Masculino,3186412233,carlososorioarmenta@gmail.com,Calle 5 54-55,Divorciado
+9,1003245585,IVAN ANTONIO SUAREZ VILLALBA,8/16/2001,Masculino,3186413246,iasaurez@unicesar.edu.co,CALLA 15 #11-49,Soltero

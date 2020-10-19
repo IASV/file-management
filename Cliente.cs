@@ -31,9 +31,8 @@ namespace Prog_III_2020_2_sesion_1
         {
             StreamWriter writer = new StreamWriter("Files/Cliente.txt", true);
 
-            writer.WriteLine(Cedula.ToString() + "," + Nombre + "," + FechaNacimiento.ToShortDateString() + "," +
-                Sexo.ToString() + "," + Telefono.ToString() + "," + Correo + "," + Direccion + "," +
-                EstadoCivil.ToString() + "," + IdCliente.ToString());
+            writer.WriteLine(IdCliente.ToString() + "," + Cedula.ToString() + "," + Nombre + "," + FechaNacimiento.ToShortDateString() + "," +
+                Sexo.ToString() + "," + Telefono.ToString() + "," + Correo + "," + Direccion + "," + EstadoCivil.ToString());
 
             writer.Close();
         }
@@ -95,23 +94,26 @@ namespace Prog_III_2020_2_sesion_1
             string[] values = value.Split('\t');
             if (values[0] != "")
             {
-                a.Cedula = Convert.ToInt64(values[0]);
+                a.IdCliente = Convert.ToInt32(values[0]);
 
-                a.Nombre = (string)values[1];
+                a.Cedula = Convert.ToInt64(values[1]);
 
-                a.FechaNacimiento = DateTime.ParseExact(values[2], "d/M/yyyy", null);
+                a.Nombre = (string)values[2];
 
-                a.Sexo = (Sexo)Sexo.Parse(typeof(Sexo), values[3].ToString());
+                //a.FechaNacimiento = DateTime.ParseExact(values[3], "d/M/yyyy", null);
+                a.FechaNacimiento = DateTime.Parse(values[3]);
 
-                a.Telefono = Convert.ToInt64(values[4]);
+                a.Sexo = (Sexo)Sexo.Parse(typeof(Sexo), values[4].ToString());
 
-                a.Correo = (string)values[5];
+                a.Telefono = Convert.ToInt64(values[5]);
 
-                a.Direccion = (string)values[6];
+                a.Correo = (string)values[6];
 
-                a.EstadoCivil = (EstadoCivil)EstadoCivil.Parse(typeof(EstadoCivil), values[7].ToString());
+                a.Direccion = (string)values[7];
 
-                a.IdCliente = Convert.ToInt32(values[8]);
+                a.EstadoCivil = (EstadoCivil)EstadoCivil.Parse(typeof(EstadoCivil), values[8].ToString());
+
+                
             }
 
             return a;
@@ -136,7 +138,8 @@ namespace Prog_III_2020_2_sesion_1
                             break;
                         case 3:
                             Console.Write("\nNueva Fecha de nacimiento dd/MM/yyy: ");
-                            v.FechaNacimiento = DateTime.ParseExact(Console.ReadLine(), "d/MM/yyyy", null);
+                            //v.FechaNacimiento = DateTime.ParseExact(Console.ReadLine(), "d/MM/yyyy", null);
+                            v.FechaNacimiento = DateTime.Parse(Console.ReadLine());
                             break;
                         case 4:
                             Console.Write("\nNuevo Sexo\n1. Femenino.\n2. Masculino.\n:: ");
@@ -169,7 +172,7 @@ namespace Prog_III_2020_2_sesion_1
                             break;
                     }
 
-                    Edit(ListaClientes.IndexOf(v), NDato - 1, v, "Files/Cliente.txt");
+                    Edit(ListaClientes.IndexOf(v), NDato, v, "Files/Cliente.txt");
                 }
                 else Console.WriteLine("¡Oooops, A ocurrido un erro!");
             }
@@ -182,6 +185,9 @@ namespace Prog_III_2020_2_sesion_1
 
         public static void ToList()
         {
+            Console.WriteLine("ID".PadRight(5) + "Cedula".PadRight(12) + "Nombre".PadRight(35) + "Fecha Nacimiento".PadRight(18) +
+                "Sexo".PadRight(12) + "Telefono".PadRight(15) + "Correo".PadRight(40) + "Direccion".PadRight(40) +
+                "Estado Civil".PadRight(12));
 
             foreach (Cliente v in Cliente.ListaClientes)
             {
@@ -204,16 +210,16 @@ namespace Prog_III_2020_2_sesion_1
         /// </summary>
         public void Show()
         {
-            Console.WriteLine(Cedula.ToString().PadRight(12) + Nombre.PadRight(35) + FechaNacimiento.ToShortDateString().PadLeft(12) +
-                Sexo.ToString().PadRight(12).PadLeft(15) + Telefono.ToString().PadLeft(12).PadRight(15) + Correo.PadRight(40) + Direccion.PadRight(40) +
-                EstadoCivil.ToString().PadRight(12) + IdCliente.ToString().PadLeft(5));
+            Console.WriteLine(IdCliente.ToString().PadRight(5) + Cedula.ToString().PadRight(12) + Nombre.PadRight(35) + FechaNacimiento.ToShortDateString().PadRight(18) +
+                Sexo.ToString().PadRight(12) + Telefono.ToString().PadRight(15) + Correo.PadRight(40) + Direccion.PadRight(40) +
+                EstadoCivil.ToString().PadRight(12) );
         }
 
         public override string ToString()
         {
-            return (Cedula.ToString() + "\t" + Nombre + "\t" + FechaNacimiento.ToShortDateString() + "\t" +
+            return (IdCliente.ToString() + "\t" + Cedula.ToString() + "\t" + Nombre + "\t" + FechaNacimiento.ToShortDateString() + "\t" +
                 Sexo.ToString() + "\t" + Telefono.ToString() + "\t" + Correo + "\t" + Direccion + "\t" +
-                EstadoCivil.ToString() + "\t" + IdCliente.ToString() + "\n");
+                EstadoCivil.ToString()   + "\n");
         }
 
         public static bool Find(int CodCliente)
@@ -251,32 +257,34 @@ namespace Prog_III_2020_2_sesion_1
             switch (i)
             {
                 case 0:
-                    Cedula = Convert.ToInt64(value);
-                    break;
-                case 1:
-                    Nombre = (string)value;
-                    break;
-                case 2:
-                    FechaNacimiento = DateTime.ParseExact(value, "d/M/yyyy", null);
-                    break;
-                case 3:
-                    Sexo = (Sexo)Sexo.Parse(typeof(Sexo), value.ToString());
-                    break;
-                case 4:
-                    Telefono = Convert.ToInt64(value);
-                    break;
-                case 5:
-                    Correo = (string)value;
-                    break;
-                case 6:
-                    Direccion = (string)value;
-                    break;
-                case 7:
-                    EstadoCivil = (EstadoCivil)EstadoCivil.Parse(typeof(EstadoCivil), value.ToString());
-                    break;
-                case 8:
                     IdCliente = Convert.ToInt32(value);
                     break;
+                case 1:
+                    Cedula = Convert.ToInt64(value);
+                    break;
+                case 2:
+                    Nombre = (string)value;
+                    break;
+                case 3:
+                    //FechaNacimiento = DateTime.ParseExact(value, "d/M/yyyy", null);
+                    FechaNacimiento = DateTime.Parse(value);
+                    break;
+                case 4:
+                    Sexo = (Sexo)Sexo.Parse(typeof(Sexo), value.ToString());
+                    break;
+                case 5:
+                    Telefono = Convert.ToInt64(value);
+                    break;
+                case 6:
+                    Correo = (string)value;
+                    break;
+                case 7:
+                    Direccion = (string)value;
+                    break;
+                case 8:
+                    EstadoCivil = (EstadoCivil)EstadoCivil.Parse(typeof(EstadoCivil), value.ToString());
+                    break;
+
             }
         }
 
@@ -316,8 +324,9 @@ namespace Prog_III_2020_2_sesion_1
             Console.Write("\nNombre: ");
             v.Nombre = Scanner.NextLine();
 
-            Console.Write("\nFecha de nacimiento dd/MM/yyy: ");
-            v.FechaNacimiento = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+            Console.Write("\nFecha de nacimiento MM/dd/yyy: ");
+            //v.FechaNacimiento = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+            v.FechaNacimiento = DateTime.Parse(Console.ReadLine());
 
             Console.Write("\nSexo\n1. Femenino.\n2. Masculino.\n:: ");
             if (Scanner.NextInt() == 1) v.Sexo = Sexo.Femnino;
@@ -355,8 +364,6 @@ namespace Prog_III_2020_2_sesion_1
         {
             int option;  
 
-            LoadList();
-
             do
             {
                 Console.Write("\n\tBienvenido al menú de clienteses\n" +
@@ -374,6 +381,7 @@ namespace Prog_III_2020_2_sesion_1
                 {
                     case 1:
                         Console.Clear();
+                        
                         CreateCliente();
                         break;
 
@@ -386,7 +394,7 @@ namespace Prog_III_2020_2_sesion_1
                         {
                             Cliente vn = Search(NCClientes);
                             vn.Show();
-                            Console.Write("\n¿Borrar cliente?\n\t1. Si.\n\t2. No.\n::");
+                            Console.Write("\n¿Borrar cliente?\n\t1. Si.\n\t2. No.\n:: ");
                             if (Scanner.NextInt() == 1)
                             {
                                 vn.Delete();

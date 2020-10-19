@@ -400,8 +400,6 @@ namespace Prog_III_2020_2_sesion_1
         {
             int option;
             
-            LoadList();
-
             do
             {
                 Console.Write("\n\tBienvenido al menú de Vendedores\n" +

@@ -12,6 +12,13 @@ namespace Prog_III_2020_2_sesion_1
         {
             int option;
 
+            Vendedor.LoadList();
+            Cliente.LoadList();
+            Carro.LoadList();
+            Inventario.LoadList();
+            Venta.LoadList();
+            Factura.LoadList();
+
             do
             {
                 Console.Clear();
@@ -25,7 +32,6 @@ namespace Prog_III_2020_2_sesion_1
                     "\t7. Salir\n" +
                     "\t:: ");
                 option = Scanner.NextInt();
-
                 switch (option)
                 {
                     case 1:
@@ -49,7 +55,6 @@ namespace Prog_III_2020_2_sesion_1
                 }
             } while (option != 7);
             Console.Read();
-            
         }
     }
 }

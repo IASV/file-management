@@ -14,13 +14,14 @@ namespace Prog_III_2020_2_sesion_1
 
         DateTime fechaSalida = DateTime.Parse("01/01/0001");
 
+        public int IdInventario { get; set; }
+        public int IdCar { get; set; }       
         public int Cantidad { get; set; }
         public long PrecioBase { get; set; }
         public long PrecioVenta { get; set; }
         public DateTime FechaIngreso { get; set; }
         public DateTime FechaSalida { get => fechaSalida; set => fechaSalida = value; }
-        public Carro Car { get; set; }
-        public int IdInventario { get; set; }
+        //public Carro Car { get; set; }
 
         public void Add()
         {
@@ -38,8 +39,8 @@ namespace Prog_III_2020_2_sesion_1
         {
             StreamWriter writer = new StreamWriter("Files/Inventario.txt", true);
 
-            writer.WriteLine(Cantidad.ToString() + "," + PrecioBase.ToString() + "," + PrecioVenta.ToString() + "," +
-                FechaIngreso.ToString() + "," + FechaSalida.ToString() + "," + Car.ToString() + "," + IdInventario.ToString());
+            writer.WriteLine(IdInventario.ToString() + "," + IdCar.ToString() + "," + Cantidad.ToString() + "," +
+                PrecioBase.ToString() + "," + PrecioVenta.ToString() + "," + FechaIngreso.ToShortDateString() + "," + FechaSalida.ToShortDateString());
 
             writer.Close();
         }
@@ -98,42 +99,39 @@ namespace Prog_III_2020_2_sesion_1
         {
             Inventario a = new Inventario();
             string[] values = value.Split('\t');
-            string car = "";
-            for (int i = 1; i < 8; i++)
-            {
-                car += values[i];
-                if (i < 8) car += "\t";
-            }
+            //string car = "";
+            //for (int i = 1; i < 8; i++)
+            //{
+            //    car += values[i];
+            //    if (i < 8) car += "\t";
+            //}
 
+            //a.Car = Carro.Parse(car);
             a.IdInventario = Convert.ToInt32(values[0]);
 
-            a.Car = Carro.Parse(car);
+            a.IdCar = value[1];
 
-            a.Cantidad = Convert.ToInt32(values[8]);
+            a.Cantidad = Convert.ToInt32(values[2]);
 
-            a.PrecioBase = Convert.ToInt64(values[9]);
+            a.PrecioBase = Convert.ToInt64(values[3]);
 
-            a.PrecioVenta = Convert.ToInt64(values[10]);
+            a.PrecioVenta = Convert.ToInt64(values[4]);
 
             //FechaIngreso = DateTime.ParseExact(value, "dd/MM/yyyy", null);
-            a.FechaIngreso = DateTime.Parse(values[11]);
+            a.FechaIngreso = DateTime.Parse(values[5]);
 
             //FechaSalida = DateTime.ParseExact(value, "dd/MM/yyyy", null);
-            a.FechaSalida = DateTime.Parse(values[12]);
-
-            
-
-            
+            a.FechaSalida = DateTime.Parse(values[6]);
 
             return a;
         }
         public static void CarsShowItems()
         {
-            Console.WriteLine("VIN".PadRight(5) + "Modelo".PadLeft(2).PadRight(4) + "Color".PadRight(10) + "Marca".PadRight(10) +
-                "Tipo Combustible".ToString().PadRight(10) + "Tipo Transmision".ToString().PadRight(10).PadLeft(12) + "ID".ToString().PadRight(2).PadLeft(4));
+            Console.WriteLine("ID".PadRight(5) + "VIN".PadRight(10) + "Modelo".PadRight(10) + "Color".PadRight(10) + "Marca".PadRight(10) +
+                "Combustible".PadRight(15) + "Transmisión".PadRight(15));
             foreach (Inventario item in ListaInventario)
             {
-                item.Car.Show();
+                Carro.Search(item.IdCar).Show();
             }
         }
         public static void Update(int IdInventario, int NDato)
@@ -170,7 +168,7 @@ namespace Prog_III_2020_2_sesion_1
 
                     }
 
-                    Edit(ListaInventario.IndexOf(v), NDato-1, v, "Files/Inventario.txt");
+                    Edit(ListaInventario.IndexOf(v), NDato+1, v, "Files/Inventario.txt");
                 }
                 else Console.WriteLine("¡Oooops, A ocurrido un erro!");
             }
@@ -183,6 +181,8 @@ namespace Prog_III_2020_2_sesion_1
 
         public static void ToList()
         {
+            Console.WriteLine("ID".PadRight(5) + "ID CAR".PadRight(10) + "Nº".PadRight(5) + "Precio Base".PadRight(15) + 
+                "Precio Venta".PadRight(15) + "Fecha Ingreso".PadRight(15) );
 
             foreach (Inventario v in Inventario.ListaInventario)
             {
@@ -205,13 +205,14 @@ namespace Prog_III_2020_2_sesion_1
         /// </summary>
         public void Show()
         {
-            Console.WriteLine(Cantidad.ToString().PadRight(10) + PrecioBase.ToString().PadLeft(12).PadRight(10) + PrecioVenta.ToString().PadLeft(12).PadRight(10) + 
-                FechaIngreso.ToString().PadRight(2).PadLeft(2) + FechaSalida.ToString().PadRight(2).PadLeft(2) + Car.ToString().PadRight(2).PadLeft(2) +  IdInventario.ToString().PadRight(2).PadLeft(4));
+            Console.WriteLine(IdInventario.ToString().PadRight(5) + IdCar.ToString().PadRight(10) + Cantidad.ToString().PadRight(5) + PrecioBase.ToString().PadRight(15) + 
+                PrecioVenta.ToString().PadRight(15) + FechaIngreso.ToShortDateString().ToString().PadRight(15) );
+           
         }
 
         public override string ToString()
         {
-            return (IdInventario.ToString() + "\t" + Car.ToString() + "\t" + Cantidad.ToString() + "\t" + PrecioBase.ToString() + "\t" +
+            return (IdInventario.ToString() + "\t" + IdCar.ToString() + "\t" + Cantidad.ToString() + "\t" + PrecioBase.ToString() + "\t" +
                 PrecioVenta.ToString() + "\t" + FechaIngreso.ToString() + "\t" + FechaSalida.ToString());
         }
 
@@ -228,7 +229,7 @@ namespace Prog_III_2020_2_sesion_1
         {
             foreach (Inventario item in ListaInventario)
             {
-                if(item.Car == v.Car)
+                if(item.IdCar == v.IdCar)
                 {
                     if(item.PrecioBase == v.PrecioBase && item.PrecioVenta == v.PrecioVenta && item.FechaIngreso == v.FechaIngreso && item.FechaSalida == v.FechaSalida)
                     {
@@ -256,7 +257,7 @@ namespace Prog_III_2020_2_sesion_1
         {
             foreach (Inventario item in ListaInventario)
             {
-                if (item.Car.IdCarro == IdCar)
+                if (item.IdCar == IdCar)
                 {
                     return item;
                 }
@@ -269,28 +270,30 @@ namespace Prog_III_2020_2_sesion_1
             switch (i)
             {
                 case 0:
-                    Cantidad = Convert.ToInt32(value);
+                    IdInventario = Convert.ToInt32(value);
                     break;
                 case 1:
-                    PrecioBase = Convert.ToInt64(value);
+                    IdCar = Convert.ToInt32(value);
                     break;
                 case 2:
-                    PrecioVenta = Convert.ToInt64(value);
+                    Cantidad = Convert.ToInt32(value);
                     break;
                 case 3:
+                    PrecioBase = Convert.ToInt64(value);
+                    break;
+                case 4:
+                    PrecioVenta = Convert.ToInt64(value);
+                    break;
+                case 5:
                     //FechaIngreso = DateTime.ParseExact(value, "dd/MM/yyyy", null);
                     FechaIngreso = DateTime.Parse(value);
                     break;
-                case 4:
+                case 6:
                     //FechaSalida = DateTime.ParseExact(value, "dd/MM/yyyy", null);
                     FechaSalida = DateTime.Parse(value);
                     break;
-                case 5:
-                    Car = Carro.Parse(value);
-                    break;
-                case 6:
-                    IdInventario = Convert.ToInt32(value);
-                    break;
+
+
             }
         }
 
@@ -323,8 +326,6 @@ namespace Prog_III_2020_2_sesion_1
         {
             int option;
 
-            LoadList();
-
             do
             {
                 Console.Write("\n\tBienvenido al menú de Inventario\n" +
@@ -350,7 +351,7 @@ namespace Prog_III_2020_2_sesion_1
                         Console.WriteLine("\t--- Lista de carros ---");
                         Carro.ToList();
                         Console.Write("\t Ingrese ID del carro\n:: ");
-                        v.Car = Carro.Search(Scanner.NextInt());
+                        v.IdCar = Scanner.NextInt();
 
                         Console.Write("\nCantidad: ");
                         v.Cantidad = Scanner.NextInt();
@@ -362,10 +363,12 @@ namespace Prog_III_2020_2_sesion_1
                         v.PrecioVenta = Scanner.NextLong();
 
                         Console.Write("\nFecha de ingreso: ");
-                        v.FechaIngreso = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+                        //v.FechaIngreso = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+                        v.FechaIngreso = DateTime.Parse(Console.ReadLine());
 
-                        Console.Write("\nFecha de salida: ");
-                        v.FechaSalida = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+                        //Console.Write("\nFecha de salida: ");
+                        //v.FechaSalida = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+                        //v.fechaSalida = DateTime.Parse(Console.ReadLine());
 
                         if (ListaInventario.Count != 0)
                             v.IdInventario = ListaInventario.Last().IdInventario + 1;

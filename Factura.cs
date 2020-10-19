@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Prog_III_2020_2_sesion_1
 {
     class Factura
     {
         public static List<Factura> ListaFactura;
-        public Venta Vent { get; set; }
+        public int IdVenta { get; set; }
         public long precioFinal { get; set; }
         public int IdFactura { get; set; }
 
@@ -31,7 +32,7 @@ namespace Prog_III_2020_2_sesion_1
         {
             StreamWriter writer = new StreamWriter("Files/Factura.txt", true);
 
-            writer.WriteLine(Vent.ToString() + "," + precioFinal.ToString() + "," + IdFactura.ToString());
+            writer.WriteLine(IdFactura.ToString() + "," + IdVenta.ToString() + "," + precioFinal.ToString()  );
 
             writer.Close();
         }
@@ -75,6 +76,8 @@ namespace Prog_III_2020_2_sesion_1
 
         public static void ToList()
         {
+            Console.WriteLine("ID".PadRight(3) + "ID Venta".PadRight(10) +
+                "Precio Final".PadRight(15));
 
             foreach (Factura v in ListaFactura)
             {
@@ -97,13 +100,13 @@ namespace Prog_III_2020_2_sesion_1
         /// </summary>
         public void Show()
         {
-            Console.WriteLine(Vent.ToString().PadRight(5) + precioFinal.ToString().PadLeft(2).PadRight(4)
-                 + IdFactura.ToString().PadRight(2).PadLeft(4));
+            Console.WriteLine(IdFactura.ToString().PadRight(3) + IdVenta.ToString().PadRight(10) + 
+                precioFinal.ToString().PadRight(15));
         }
-
+        
         public override string ToString()
         {
-            return (Vent.ToString() + "\t" + precioFinal.ToString() + "\t" + IdFactura.ToString());
+            return (IdFactura.ToString() + "\t" + IdVenta.ToString() + "\t" + precioFinal.ToString()  );
         }
 
         public static bool Find(int IdFactura)
@@ -132,14 +135,15 @@ namespace Prog_III_2020_2_sesion_1
             switch (i)
             {
                 case 0:
-                    Vent = Venta.Parse(value);
-                    break;
-                case 1:
-                    precioFinal = Convert.ToInt64(value);
-                    break;
-                case 2:
                     IdFactura = Convert.ToInt32(value);
                     break;
+                case 1:
+                    IdVenta = Convert.ToInt32(value);
+                    break;
+                case 2:
+                    precioFinal = Convert.ToInt64(value);
+                    break;
+
             }
         }
 
@@ -172,19 +176,13 @@ namespace Prog_III_2020_2_sesion_1
         {
             int option;
 
-            Vendedor.LoadList();
-            Cliente.LoadList();
-            Carro.LoadList();
-            Venta.LoadList();
-            LoadList();
-
             do
             {
                 Console.Write("\n\tBienvenido al menú de Facturas\n" +
                     "\t1. Crear Factura.\n" +
                     "\t2. Eliminar Factura.\n" +
                     "\t3. Listar Facturas.\n" +
-                    "\t4. Buscar Factura.\n" +
+                    "\t4. Buscar e imprimir Factura.\n" +
                     "\t5. Salir.\n" +
                     "\t:: ");
 
@@ -201,10 +199,10 @@ namespace Prog_III_2020_2_sesion_1
                         int IdVenta = Scanner.NextInt();
                         if (Venta.Find(IdVenta))
                         {
-                            v.Vent = Venta.Search(IdVenta);
+                            v.IdVenta = Venta.Search(IdVenta).IdVenta;
                         }
 
-                        v.precioFinal = v.Vent.Item.PrecioVenta;
+                        v.precioFinal = Inventario.Search(Venta.Search(IdVenta).IdItem).PrecioVenta;
 
                         if (ListaFactura.Count != 0)
                             v.IdFactura = ListaFactura.Last().IdFactura + 1;
@@ -214,6 +212,8 @@ namespace Prog_III_2020_2_sesion_1
                         v.Show();
 
                         v.Add();
+
+                        Imprimir.Imp(v);
 
                         break;
 
@@ -252,7 +252,6 @@ namespace Prog_III_2020_2_sesion_1
                         Console.Write("\nIngrese el ID de la Factura.\n:: ");
                         int Idfactura = Scanner.NextInt();
                         Factura f = Search(Idfactura);
-                        f.Show();
                         Imprimir.Imp(f);
                         break;
                 }
