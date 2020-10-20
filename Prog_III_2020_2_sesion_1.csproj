@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abono.cs" />
     <Compile Include="Carro.cs" />
     <Compile Include="Cliente.cs" />
     <Compile Include="Combustible.cs" />

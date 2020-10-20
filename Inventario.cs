@@ -21,7 +21,6 @@ namespace Prog_III_2020_2_sesion_1
         public long PrecioVenta { get; set; }
         public DateTime FechaIngreso { get; set; }
         public DateTime FechaSalida { get => fechaSalida; set => fechaSalida = value; }
-        //public Carro Car { get; set; }
 
         public void Add()
         {

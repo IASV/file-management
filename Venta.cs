@@ -360,10 +360,10 @@ namespace Prog_III_2020_2_sesion_1
                         }
 
                         Console.Write("Ingrese fecha de venta. MM/dd/yyyy\n:: ");
-                        Inventario n = Inventario.Search(IdCar);
-                        n.FechaSalida = DateTime.Parse(Scanner.NextLine());
-                        n.FechaSalida = DateTime.Parse(n.FechaSalida.ToShortDateString());
-                        Inventario.Edit(Inventario.ListaInventario.IndexOf(n),6,n,"Files/Inventario.txt");
+                        //Inventario n = Inventario.Search(IdCar);
+                        item.FechaSalida = DateTime.Parse(Scanner.NextLine());
+                        item.FechaSalida = DateTime.Parse(item.FechaSalida.ToShortDateString());
+                        Inventario.Edit(Inventario.ListaInventario.IndexOf(item),6,item,"Files/Inventario.txt");
 
                         if (ListaVentas.Count != 0)
                             v.IdVenta = ListaVentas.Last().IdVenta + 1;
