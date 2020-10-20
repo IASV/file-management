@@ -36,7 +36,7 @@ namespace Prog_III_2020_2_sesion_1
             Console.WriteLine("\t" + "Vendedor: " + vendedor.Nombre.PadRight(35) + "SubTotal: " + item.PrecioVenta.ToString().PadRight(15));
             Console.WriteLine("\t------------------------------------------------------------------------");
             Console.WriteLine("\t" + "IVA: 19%".PadLeft(53));
-            Console.WriteLine("\t" + "Total: ".PadLeft(52) + (item.PrecioVenta + (item.PrecioVenta*0.19)).ToString());
+            Console.WriteLine("\t" + "Total: ".PadLeft(52) + factura.precioFinal.ToString());
         }
 
     }

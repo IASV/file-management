@@ -201,8 +201,8 @@ namespace Prog_III_2020_2_sesion_1
                         {
                             v.IdVenta = Venta.Search(IdVenta).IdVenta;
                         }
-
-                        v.precioFinal = Inventario.Search(Venta.Search(IdVenta).IdItem).PrecioVenta;
+                        Inventario item = Inventario.Search(Venta.Search(IdVenta).IdItem);
+                        v.precioFinal = item.PrecioVenta + Convert.ToInt64(item.PrecioVenta * 0.19);
 
                         if (ListaFactura.Count != 0)
                             v.IdFactura = ListaFactura.Last().IdFactura + 1;
