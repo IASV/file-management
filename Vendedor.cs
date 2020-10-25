@@ -14,8 +14,7 @@ namespace Prog_III_2020_2_sesion_1
         /// static
         /// </summary>
         public static List<Vendedor> ListaVendedor;
-
-        
+        public static string path = "Files/Vendedor.txt";
 
         public int IdVendedor
         {
@@ -57,20 +56,19 @@ namespace Prog_III_2020_2_sesion_1
             }
 
             ListaVendedor.Add(this);
-
-            Save();
+            this.Save();
         }
 
-        private void Save()
+        public void Save()
         {
-            System.IO.StreamWriter writer = new System.IO.StreamWriter("Files/Vendedor.txt", true);
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Save(this.GetLine());
+        }
 
-            writer.WriteLine(Cedula.ToString() + "," + Nombre + "," + FechaNacimiento.ToShortDateString() + "," +
-                Sexo.ToString() + "," + Telefono.ToString() + "," + Correo + "," + Direccion + "," +
-                EstadoCivil.ToString() + "," + IdVendedor.ToString() + "," + FechaIngreso.ToShortDateString() + "," + 
-                Salario.ToString() + "," + Profesion + "," + Calificacion.ToString());
-
-            writer.Close();
+        private string GetLine()
+        {
+            return($"{Cedula},{Nombre},{FechaNacimiento.ToShortDateString()},{Sexo},{Telefono},{Correo},{Direccion}," +
+                $"{EstadoCivil},{IdVendedor},{FechaIngreso.ToShortDateString()},{Salario},{Profesion},{Calificacion}");
         }
 
         public void Delete()
@@ -83,52 +81,64 @@ namespace Prog_III_2020_2_sesion_1
 
         public static void Delete(object data)
         {
-            using (StreamWriter fileWrite = new StreamWriter("Files/temp.txt",true))
-            {
-                using (StreamReader fielRead = new StreamReader("Files/Vendedor.txt"))
-                {
-                    String line;
-
-                    while ((line = fielRead.ReadLine()) != null)
-                    {
-                        string[] datos = line.Split(new char[] { ',' });
-                        string[] dateValues = (data.ToString()).Split('\t');
-                        if (datos[0].ToString() != dateValues[0].ToString())
-                        {
-                            fileWrite.WriteLine(line);
-                        }
-
-                    }
-                }
-            }
-
-            //aqui se renombrea el archivo temporal
-            File.Delete("Files/Vendedor.txt");
-            File.Move("Files/temp.txt", "Files/Vendedor.txt");
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Delete(data);
         }
-        public static void Edit(int linea, int i, object data, string Archivo)
+
+        public static void Edit(int linea, int i, object data)
         {
-            string[] All = File.ReadAllLines(Archivo);
-            string[] Lines = (All[linea]).Split(',');
-            string[] date = (data.ToString()).Split('\t');
-
-            /*int calificacion = Convert.ToInt32(date[12]);
-            date[12] = calificacion.ToString();*/
-
-            Lines[i] = date[i];
-            string dataText = "";
-            for (int j = 0; j < Lines.Length; j++)
-            {
-                if(Lines[j] != "\n")
-                    dataText += Lines[j];
-                if (j < Lines.Length-1) 
-                    dataText += ",";
-            }
-
-            All[linea] = dataText;
-
-            File.WriteAllLines(Archivo, All);
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Edit(linea, i, data);
         }
+
+        //public static void Delete(object data)
+        //{
+        //    using (StreamWriter fileWrite = new StreamWriter("Files/temp.txt",true))
+        //    {
+        //        using (StreamReader fielRead = new StreamReader("Files/Vendedor.txt"))
+        //        {
+        //            String line;
+
+        //            while ((line = fielRead.ReadLine()) != null)
+        //            {
+        //                string[] datos = line.Split(new char[] { ',' });
+        //                string[] dateValues = (data.ToString()).Split('\t');
+        //                if (datos[0].ToString() != dateValues[0].ToString())
+        //                {
+        //                    fileWrite.WriteLine(line);
+        //                }
+
+        //            }
+        //        }
+        //    }
+
+        //    //aqui se renombrea el archivo temporal
+        //    File.Delete("Files/Vendedor.txt");
+        //    File.Move("Files/temp.txt", "Files/Vendedor.txt");
+        //}
+        //public static void Edit(int linea, int i, object data, string Archivo)
+        //{
+        //    string[] All = File.ReadAllLines(Archivo);
+        //    string[] Lines = (All[linea]).Split(',');
+        //    string[] date = (data.ToString()).Split('\t');
+
+        //    /*int calificacion = Convert.ToInt32(date[12]);
+        //    date[12] = calificacion.ToString();*/
+
+        //    Lines[i] = date[i];
+        //    string dataText = "";
+        //    for (int j = 0; j < Lines.Length; j++)
+        //    {
+        //        if(Lines[j] != "\n")
+        //            dataText += Lines[j];
+        //        if (j < Lines.Length-1) 
+        //            dataText += ",";
+        //    }
+
+        //    All[linea] = dataText;
+
+        //    File.WriteAllLines(Archivo, All);
+        //}
 
         public static Vendedor Parse(string value)
         {
@@ -193,7 +203,7 @@ namespace Prog_III_2020_2_sesion_1
                             v.Nombre = Scanner.NextLine();
                             break;
                         case 3:
-                            Console.Write("\nNueva Fecha de nacimiento dd/MM/yyy");
+                            Console.Write("\nNueva Fecha de nacimiento d/MM/yyy");
                             v.FechaNacimiento = DateTime.ParseExact(Console.ReadLine(), "d/MM/yyyy", null);
                             break;
                         case 4:
@@ -227,7 +237,7 @@ namespace Prog_III_2020_2_sesion_1
                             break;
                         case 9:
                             NDato = 10;
-                            Console.Write("\nNueva Fecha de ingreso dd/MM/yyy");
+                            Console.Write("\nNueva Fecha de ingreso d/MM/yyy");
                             v.FechaIngreso = DateTime.ParseExact(Console.ReadLine(), "d/MM/yyyy", null);
                             break;
                         case 10:
@@ -247,7 +257,7 @@ namespace Prog_III_2020_2_sesion_1
                             break;
                     }
 
-                    Edit(ListaVendedor.IndexOf(v), NDato - 1, v, "Files/Vendedor.txt");
+                    Edit(ListaVendedor.IndexOf(v), NDato - 1, v);
                 }
                 else Console.WriteLine("¡Oooops, A ocurrido un erro!");
             }
@@ -267,15 +277,6 @@ namespace Prog_III_2020_2_sesion_1
             }
         }
 
-        //public string List()
-        //{
-        //    string todos = "";
-        //    foreach (Vendedor vendedor in ListaVendedor)
-        //    {
-        //        todos += vendedor.ToString();
-        //    }
-        //    return todos;
-        //}
         /// <summary>
         /// Muestra los datos de un vendedor
         /// </summary>
@@ -336,7 +337,7 @@ namespace Prog_III_2020_2_sesion_1
                     Nombre = (string)value;
                     break;
                 case 2:
-                    FechaNacimiento = DateTime.ParseExact(value, "d/MM/yyyy", null);
+                    FechaNacimiento = DateTime.ParseExact(value,"d/MM/yyyy",null);
                     break;
                 case 3:
                     Sexo = (Sexo)Sexo.Parse(typeof(Sexo), value.ToString());
@@ -426,8 +427,8 @@ namespace Prog_III_2020_2_sesion_1
                         Console.Write("\nNombre: ");
                         v.Nombre = Scanner.NextLine();
 
-                        Console.Write("\nFecha de nacimiento dd/MM/yyy: ");
-                        v.FechaNacimiento = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+                        Console.Write("\nFecha de nacimiento d/MM/yyy: ");
+                        v.FechaNacimiento = DateTime.ParseExact(Scanner.NextLine(),"d/MM/yyyy",null);
 
                         Console.Write("\nSexo\n1. Femenino.\n2. Masculino.\n:: ");
                         if (Scanner.NextInt() == 1) v.Sexo = Sexo.Femnino;
@@ -455,7 +456,7 @@ namespace Prog_III_2020_2_sesion_1
 
                         
 
-                        Console.Write("\nFecha de ingreso dd/MM/yyy: ");
+                        Console.Write("\nFecha de ingreso d/MM/yyy: ");
                         v.FechaIngreso = DateTime.ParseExact(Console.ReadLine(), "d/MM/yyyy", null);
 
                         Console.Write("\nSalario: ");

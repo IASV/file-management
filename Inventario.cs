@@ -11,7 +11,7 @@ namespace Prog_III_2020_2_sesion_1
     class Inventario
     {
         public static List<Inventario> ListaInventario;
-
+        public static string path = "Files/Inventario.txt";
         DateTime fechaSalida = DateTime.Parse("01/01/0001");
 
         public int IdInventario { get; set; }
@@ -36,12 +36,14 @@ namespace Prog_III_2020_2_sesion_1
 
         private void Save()
         {
-            StreamWriter writer = new StreamWriter("Files/Inventario.txt", true);
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Save(this.GetLine());
+        }
 
-            writer.WriteLine(IdInventario.ToString() + "," + IdCar.ToString() + "," + Cantidad.ToString() + "," +
-                PrecioBase.ToString() + "," + PrecioVenta.ToString() + "," + FechaIngreso.ToShortDateString() + "," + FechaSalida.ToShortDateString());
-
-            writer.Close();
+        private string GetLine()
+        {
+            return $"{IdInventario},{IdCar},{Cantidad}," +
+                $"{PrecioBase},{PrecioVenta},{FechaIngreso.ToShortDateString()},{FechaSalida.ToShortDateString()}";
         }
 
         public void Delete()
@@ -54,45 +56,13 @@ namespace Prog_III_2020_2_sesion_1
 
         public static void Delete(object data)
         {
-            using (StreamWriter fileWrite = new StreamWriter("Files/temp.txt", true))
-            {
-                using (StreamReader fielRead = new StreamReader("Files/Inventario.txt"))
-                {
-                    String line;
-
-                    while ((line = fielRead.ReadLine()) != null)
-                    {
-                        string[] datos = line.Split(new char[] { ',' });
-                        string[] dateValues = (data.ToString()).Split('\t');
-                        if (datos[5].ToString() != dateValues[5].ToString())
-                        {
-                            fileWrite.WriteLine(line);
-                        }
-
-                    }
-                }
-            }
-
-            //aqui se renombrea el archivo temporal
-            File.Delete("Files/Inventario.txt");
-            File.Move("Files/temp.txt", "Files/Inventario.txt");
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Delete(data);
         }
-        public static void Edit(int linea, int i, object data, string Archivo)
+        public static void Edit(int linea, int i, object data)
         {
-            string[] All = File.ReadAllLines(Archivo);
-            string[] Lines = (All[linea]).Split(',');
-            string[] date = (data.ToString()).Split('\t');
-            Lines[i] = date[i];
-            string dataText = "";
-            for (int j = 0; j < Lines.Length; j++)
-            {
-                dataText += Lines[j];
-                if (j < Lines.Length) dataText += ",";
-            }
-
-            All[linea] = dataText;
-
-            File.WriteAllLines(Archivo, All);
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Edit(linea, i, data);
         }
         public static Inventario Parse(string value)
         {
@@ -167,7 +137,7 @@ namespace Prog_III_2020_2_sesion_1
 
                     }
 
-                    Edit(ListaInventario.IndexOf(v), NDato+1, v, "Files/Inventario.txt");
+                    Edit(ListaInventario.IndexOf(v), NDato+1, v);
                 }
                 else Console.WriteLine("¡Oooops, A ocurrido un erro!");
             }

@@ -51,6 +51,7 @@
     <Compile Include="Combustible.cs" />
     <Compile Include="EstadoCivil.cs" />
     <Compile Include="Factura.cs" />
+    <Compile Include="GestionArchivo.cs" />
     <Compile Include="Imprimir.cs" />
     <Compile Include="Inventario.cs" />
     <Compile Include="Persona.cs" />

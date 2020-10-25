@@ -11,6 +11,8 @@ namespace Prog_III_2020_2_sesion_1
     class Factura
     {
         public static List<Factura> ListaFactura;
+        public static string path = "Files/Factura.txt";
+
         public int IdVenta { get; set; }
         public long precioFinal { get; set; }
         public int IdFactura { get; set; }
@@ -30,11 +32,13 @@ namespace Prog_III_2020_2_sesion_1
 
         private void Save()
         {
-            StreamWriter writer = new StreamWriter("Files/Factura.txt", true);
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Save(this.GetLine());
+        }
 
-            writer.WriteLine(IdFactura.ToString() + "," + IdVenta.ToString() + "," + precioFinal.ToString()  );
-
-            writer.Close();
+        private string GetLine()
+        {
+            return $"{IdFactura},{IdVenta},{precioFinal}";
         }
 
         public void Delete()
@@ -46,28 +50,8 @@ namespace Prog_III_2020_2_sesion_1
         }
         public static void Delete(object data)
         {
-            using (StreamWriter fileWrite = new StreamWriter("Files/temp.txt", true))
-            {
-                using (StreamReader fielRead = new StreamReader("Files/Factura.txt"))
-                {
-                    String line;
-
-                    while ((line = fielRead.ReadLine()) != null)
-                    {
-                        string[] datos = line.Split(new char[] { ',' });
-                        string[] dateValues = (data.ToString()).Split('\t');
-                        if (datos[0].ToString() != dateValues[0].ToString())
-                        {
-                            fileWrite.WriteLine(line);
-                        }
-
-                    }
-                }
-            }
-
-            //aqui se renombrea el archivo temporal
-            File.Delete("Files/Factura.txt");
-            File.Move("Files/temp.txt", "Files/Factura.txt");
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Delete(data);
         }
 
         /// <summary>

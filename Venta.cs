@@ -11,6 +11,8 @@ namespace Prog_III_2020_2_sesion_1
     class Venta
     {
         public static List<Venta> ListaVentas;
+        public static string path = "Files/Venta.txt";
+
         public int IdClient { get; set; }
         public int IdVendedor { get; set; }
         public int IdItem { get; set; }
@@ -30,11 +32,13 @@ namespace Prog_III_2020_2_sesion_1
 
         private void Save()
         {
-            StreamWriter writer = new StreamWriter("Files/Venta.txt", true);
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Save(this.GetLine());
+        }
 
-            writer.WriteLine(IdVenta.ToString() + "," + IdClient.ToString() + "," + IdVendedor.ToString() + "," + IdItem.ToString());
-
-            writer.Close();
+        private string GetLine()
+        {
+            return $"{IdVenta},{IdClient},{IdVendedor},{IdItem}";
         }
 
         public void Delete()
@@ -46,45 +50,13 @@ namespace Prog_III_2020_2_sesion_1
         }
         public static void Delete(object data)
         {
-            using (StreamWriter fileWrite = new StreamWriter("Files/temp.txt", true))
-            {
-                using (StreamReader fielRead = new StreamReader("Files/Venta.txt"))
-                {
-                    String line;
-
-                    while ((line = fielRead.ReadLine()) != null)
-                    {
-                        string[] datos = line.Split(new char[] { ',' });
-                        string[] dateValues = (data.ToString()).Split('\t');
-                        if (datos[0].ToString() != dateValues[0].ToString())
-                        {
-                            fileWrite.WriteLine(line);
-                        }
-
-                    }
-                }
-            }
-
-            //aqui se renombrea el archivo temporal
-            File.Delete("Files/Venta.txt");
-            File.Move("Files/temp.txt", "Files/Venta.txt");
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Delete(data);
         }
-        public static void Edit(int linea, int i, object data, string Archivo)
+        public static void Edit(int linea, int i, object data)
         {
-            string[] All = File.ReadAllLines(Archivo);
-            string[] Lines = (All[linea]).Split(',');
-            string[] date = (data.ToString()).Split('\t');
-            Lines[i] = date[i];
-            string dataText = "";
-            for (int j = 0; j < Lines.Length; j++)
-            {
-                dataText += Lines[j];
-                if (j < Lines.Length) dataText += ",";
-            }
-
-            All[linea] = dataText;
-
-            File.WriteAllLines(Archivo, All);
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Edit(linea, i, data);
         }
         public static Venta Parse(string value)
         {
@@ -156,13 +128,13 @@ namespace Prog_III_2020_2_sesion_1
                             Console.Write("Ingrese fecha de venta. MM/dd/yyyy\n:: ");
                             Inventario n = Inventario.Search(v.IdItem);
                             n.FechaSalida = DateTime.Parse(Scanner.NextLine());
-                            Inventario.Edit(6, 6, n, "Inventario.txt");
+                            Inventario.Edit(6, 6, n);
 
                             break;
 
                     }
 
-                    Edit(ListaVentas.IndexOf(v), NDato - 1, v, "Files/Venta.txt");
+                    Edit(ListaVentas.IndexOf(v), NDato - 1, v);
                 }
                 else Console.WriteLine("¡Oooops, A ocurrido un erro!");
             }
@@ -363,7 +335,7 @@ namespace Prog_III_2020_2_sesion_1
                         //Inventario n = Inventario.Search(IdCar);
                         item.FechaSalida = DateTime.Parse(Scanner.NextLine());
                         item.FechaSalida = DateTime.Parse(item.FechaSalida.ToShortDateString());
-                        Inventario.Edit(Inventario.ListaInventario.IndexOf(item),6,item,"Files/Inventario.txt");
+                        Inventario.Edit(Inventario.ListaInventario.IndexOf(item),6,item);
 
                         if (ListaVentas.Count != 0)
                             v.IdVenta = ListaVentas.Last().IdVenta + 1;

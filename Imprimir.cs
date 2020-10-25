@@ -39,5 +39,5 @@ namespace Prog_III_2020_2_sesion_1
             Console.WriteLine("\t" + "Total: ".PadLeft(52) + factura.precioFinal.ToString());
         }
 
-    }
+    }//Poner un for y buscar por cédula e impimir los item asociados al cliente o comprador.
 }

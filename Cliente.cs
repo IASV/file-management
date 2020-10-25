@@ -12,6 +12,7 @@ namespace Prog_III_2020_2_sesion_1
     class Cliente : Persona
     {
         public static List<Cliente> ListaClientes;
+        public static string path = "Files/Cliente.txt";
 
         public int IdCliente { get; set; }
 
@@ -23,18 +24,19 @@ namespace Prog_III_2020_2_sesion_1
             }
 
             ListaClientes.Add(this);
-
-            Save();
+            this.Save();
         }
 
-        private void Save()
+        public void Save()
         {
-            StreamWriter writer = new StreamWriter("Files/Cliente.txt", true);
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Save(this.GetLine());
+        }
 
-            writer.WriteLine(IdCliente.ToString() + "," + Cedula.ToString() + "," + Nombre + "," + FechaNacimiento.ToShortDateString() + "," +
-                Sexo.ToString() + "," + Telefono.ToString() + "," + Correo + "," + Direccion + "," + EstadoCivil.ToString());
-
-            writer.Close();
+        private string GetLine()
+        {
+            return $"{IdCliente},{Cedula},{Nombre},{FechaNacimiento.ToShortDateString()},+" +
+                $"{Sexo},{Telefono},{Correo},{Direccion},{EstadoCivil}";
         }
 
         public void Delete()
@@ -47,45 +49,13 @@ namespace Prog_III_2020_2_sesion_1
 
         public static void Delete(object data)
         {
-            using (StreamWriter fileWrite = new StreamWriter("Files/temp.txt", true))
-            {
-                using (StreamReader fielRead = new StreamReader("Files/Cliente.txt"))
-                {
-                    String line;
-
-                    while ((line = fielRead.ReadLine()) != null)
-                    {
-                        string[] datos = line.Split(new char[] { ',' });
-                        string[] dateValues = (data.ToString()).Split('\t');
-                        if (datos[0].ToString() != dateValues[0].ToString())
-                        {
-                            fileWrite.WriteLine(line);
-                        }
-
-                    }
-                }
-            }
-
-            //aqui se renombrea el archivo temporal
-            File.Delete("Files/Cliente.txt");
-            File.Move("Files/temp.txt", "Files/Cliente.txt");
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Delete(data);
         }
-        public static void Edit(int linea, int i, object data, string Archivo)
+        public static void Edit(int linea, int i, object data)
         {
-            string[] All = File.ReadAllLines(Archivo);
-            string[] Lines = (All[linea]).Split(',');
-            string[] date = (data.ToString()).Split('\t');
-            Lines[i] = date[i];
-            string dataText = "";
-            for (int j = 0; j < Lines.Length; j++)
-            {
-                dataText += Lines[j];
-                if (j < Lines.Length) dataText += ",";
-            }
-
-            All[linea] = dataText;
-
-            File.WriteAllLines(Archivo, All);
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Edit(linea, i, data);
         }
 
         public static Cliente Parse(string value)
@@ -172,7 +142,7 @@ namespace Prog_III_2020_2_sesion_1
                             break;
                     }
 
-                    Edit(ListaClientes.IndexOf(v), NDato, v, "Files/Cliente.txt");
+                    Edit(ListaClientes.IndexOf(v), NDato, v);
                 }
                 else Console.WriteLine("¡Oooops, A ocurrido un erro!");
             }

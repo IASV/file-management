@@ -11,6 +11,7 @@ namespace Prog_III_2020_2_sesion_1
     class Carro
     {
         public static List<Carro> ListaCarros;
+        public static string path = "Files/Carro.txt";
 
         public int IdCarro { get; set; }
         public string VIN { get; set; }
@@ -35,12 +36,14 @@ namespace Prog_III_2020_2_sesion_1
 
         private void Save()
         {
-            StreamWriter writer = new StreamWriter("Files/Carro.txt", true);
- 
-            writer.WriteLine(IdCarro.ToString() + "," + VIN + "," + Modelo + "," + Color + "," + Marca + "," +
-                TipoCombustible.ToString() + "," + TipoTransmision.ToString() );
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Save(this.GetLine());
+        }
 
-            writer.Close();
+        private string GetLine()
+        {
+            return $"{IdCarro},{VIN},{Modelo},{Color},{Marca}," +
+                $"{TipoCombustible},{TipoTransmision}";
         }
 
         public void Delete()
@@ -52,45 +55,13 @@ namespace Prog_III_2020_2_sesion_1
         }
         public static void Delete(object data)
         {
-            using (StreamWriter fileWrite = new StreamWriter("Files/temp.txt", true))
-            {
-                using (StreamReader fielRead = new StreamReader("Files/Carro.txt"))
-                {
-                    String line;
-
-                    while ((line = fielRead.ReadLine()) != null)
-                    {
-                        string[] datos = line.Split(new char[] { ',' });
-                        string[] dateValues = (data.ToString()).Split('\t');
-                        if (datos[0].ToString() != dateValues[0].ToString())
-                        {
-                            fileWrite.WriteLine(line);
-                        }
-
-                    }
-                }
-            }
-
-            //aqui se renombrea el archivo temporal
-            File.Delete("Files/Carro.txt");
-            File.Move("Files/temp.txt", "Files/Carro.txt");
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Delete(data);
         }
-        public static void Edit(int linea, int i, object data, string Archivo)
+        public static void Edit(int linea, int i, object data)
         {
-            string[] All = File.ReadAllLines(Archivo);
-            string[] Lines = (All[linea]).Split(',');
-            string[] date = (data.ToString()).Split('\t');
-            Lines[i] = date[i];
-            string dataText = "";
-            for (int j = 0; j < Lines.Length; j++)
-            {
-                dataText += Lines[j];
-                if (j < Lines.Length) dataText += ",";
-            }
-
-            All[linea] = dataText;
-
-            File.WriteAllLines(Archivo, All);
+            GestionArchivo gs = new GestionArchivo(path);
+            gs.Edit(linea, i, data);
         }
 
         public static Carro Parse(string value)
@@ -169,7 +140,7 @@ namespace Prog_III_2020_2_sesion_1
 
                     }
 
-                    Edit(ListaCarros.IndexOf(v), NDato, v, "Files/Carro.txt");
+                    Edit(ListaCarros.IndexOf(v), NDato, v);
                 }
                 else Console.WriteLine("¡Oooops, A ocurrido un erro!");
             }
