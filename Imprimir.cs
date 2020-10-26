@@ -16,6 +16,7 @@ namespace Prog_III_2020_2_sesion_1
             Cliente cliente = Cliente.Search(0,venta.IdClient);
             Vendedor vendedor = Vendedor.Search(0,venta.IdVendedor);
             Carro carro = Carro.Search(item.IdCar);
+            Abono abono = Abono.SearchIdVenta(factura.IdVenta);
 
             Console.Clear();
             Console.WriteLine();
@@ -32,6 +33,16 @@ namespace Prog_III_2020_2_sesion_1
             Console.WriteLine("\t------------------------------------------------------------------------");
             Console.WriteLine("\t" + "NoItem".PadRight(10) + "Descripcion".PadRight(15) + "Valor/Unidad".PadRight(15));
             Console.WriteLine("\t" + item.IdInventario.ToString().PadRight(10) + carro.Marca.PadRight(15) + item.PrecioVenta.ToString().PadRight(15));
+            if(venta.formaPago == FormaPago.Credito)
+            {
+                Console.WriteLine("\n\tForma de pago".PadRight(18) + "Valor".PadRight(10));
+                Console.WriteLine("\t" + venta.formaPago.ToString().PadRight(18) + abono.Abn.ToString().PadRight(10));
+            }
+            else
+            {
+                Console.WriteLine("\n\tForma de pago".PadRight(10));
+                Console.WriteLine("\t" + venta.formaPago.ToString().PadRight(10));
+            }
             Console.WriteLine("\t------------------------------------------------------------------------");
             Console.WriteLine("\t" + "Vendedor: " + vendedor.Nombre.PadRight(35) + "SubTotal: " + item.PrecioVenta.ToString().PadRight(15));
             Console.WriteLine("\t------------------------------------------------------------------------");

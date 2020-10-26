@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Prog_III_2020_2_sesion_1
 {
@@ -13,10 +14,12 @@ namespace Prog_III_2020_2_sesion_1
         public static List<Venta> ListaVentas;
         public static string path = "Files/Venta.txt";
 
+        public int IdVenta { get; set; }
         public int IdClient { get; set; }
         public int IdVendedor { get; set; }
         public int IdItem { get; set; }
-        public int IdVenta { get; set; }
+        public FormaPago formaPago { get; set; }
+
 
         public void Add()
         {
@@ -38,7 +41,7 @@ namespace Prog_III_2020_2_sesion_1
 
         private string GetLine()
         {
-            return $"{IdVenta},{IdClient},{IdVendedor},{IdItem}";
+            return $"{IdVenta},{IdClient},{IdVendedor},{IdItem},{formaPago}";
         }
 
         public void Delete()
@@ -148,7 +151,7 @@ namespace Prog_III_2020_2_sesion_1
         public static void ToList()
         {
             Console.WriteLine("ID".PadRight(5) + "ID Cliente".PadRight(12) +
-                "ID Vendedor".PadRight(12) + "ID Item".PadRight(12));
+                "ID Vendedor".PadRight(12) + "ID Item".PadRight(12) + "Forma de Pago".PadRight(15));
 
             foreach (Venta v in ListaVentas)
             {
@@ -172,12 +175,13 @@ namespace Prog_III_2020_2_sesion_1
         public void Show()
         {
             Console.WriteLine(IdVenta.ToString().PadRight(5) + IdClient.ToString().PadRight(12) + 
-                IdVendedor.ToString().PadRight(12) + IdItem.ToString().PadRight(12));
+                IdVendedor.ToString().PadRight(12) + IdItem.ToString().PadRight(12) + formaPago.ToString().PadRight(15));
         }
 
         public override string ToString()
         {
-            return (IdVenta.ToString() + "\t" + IdClient.ToString() + "\t" + IdVendedor.ToString() + "\t" + IdItem.ToString());
+            return (IdVenta.ToString() + "\t" + IdClient.ToString() + "\t" + IdVendedor.ToString() +
+                "\t" + IdItem.ToString() + "\t" + formaPago.ToString());
         }
 
         public static bool Find(int IdVenta)
@@ -228,6 +232,9 @@ namespace Prog_III_2020_2_sesion_1
                     break;
                 case 3:
                     IdItem = Convert.ToInt32(value);
+                    break;
+                case 4:
+                    formaPago = (FormaPago)FormaPago.Parse(typeof(FormaPago), value.ToString());
                     break;
                 
             }
@@ -342,7 +349,24 @@ namespace Prog_III_2020_2_sesion_1
                         else
                             v.IdVenta = 1;
 
+                        Console.Write("\nForma de pago\n" +
+                            "\t1. Crédito.\n" +
+                            "\t2. Al contado\n" +
+                            "\t:: ");
+
+                        if (Scanner.NextInt() == 1)
+                        {
+                            v.formaPago = FormaPago.Credito;
+                            Abono a = new Abono();
+                            a.IdCliente = v.IdClient;
+                            a.IdVenta = v.IdVenta;
+                            a.Add();
+                        }
+                        else v.formaPago = FormaPago.Contado;
+
+
                         v.Show();
+                        
 
                         v.Add();
 

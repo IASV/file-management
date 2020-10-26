@@ -13,10 +13,10 @@ namespace Prog_III_2020_2_sesion_1
         public static List<Factura> ListaFactura;
         public static string path = "Files/Factura.txt";
 
+        public int IdFactura { get; set; }
         public int IdVenta { get; set; }
         public long precioFinal { get; set; }
-        public int IdFactura { get; set; }
-
+        
 
         public void Add()
         {
